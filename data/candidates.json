@@ -1,1 +1,65 @@
-[]
+[
+  {
+    "id": "cand-1792483582000",
+    "name": "Rajat",
+    "email": "clinician@medvantage.in",
+    "phone": "+91 98000 00000",
+    "cadre": "DOCTOR",
+    "degree": "MS",
+    "specialty": "Obstetrics & Gynecology",
+    "experience_years": 1,
+    "age": 29,
+    "preferred_state": "All India",
+    "preferred_city": "ALL",
+    "interested_in_fellowships": true,
+    "preferred_sector": "ALL",
+    "current_role": "MS Professional",
+    "alma_mater": "Recognized Medical/Dental/Nursing Institute",
+    "skills": [
+      "Clinical Care",
+      "Patient Management"
+    ]
+  },
+  {
+    "id": "cand-1792483427316",
+    "name": "Rupal",
+    "email": "clinician@medvantage.in",
+    "phone": "+91 98000 00000",
+    "cadre": "DOCTOR",
+    "degree": "MS",
+    "specialty": "Obstetrics & Gynecology",
+    "experience_years": 1,
+    "age": 29,
+    "preferred_state": "Maharashtra",
+    "preferred_city": "Nagpur",
+    "interested_in_fellowships": true,
+    "preferred_sector": "ALL",
+    "current_role": "MS Professional",
+    "alma_mater": "GMC Nagpur",
+    "skills": [
+      "Clinical Care",
+      "Patient Management"
+    ]
+  },
+  {
+    "id": "cand-1792482275730",
+    "name": "Rupal",
+    "email": "clinician@medvantage.in",
+    "phone": "+91 98000 00000",
+    "cadre": "DOCTOR",
+    "degree": "MS",
+    "specialty": "OBGY",
+    "experience_years": 2,
+    "age": 29,
+    "preferred_state": "Maharashtra",
+    "preferred_city": "",
+    "interested_in_fellowships": true,
+    "preferred_sector": "ALL",
+    "current_role": "MS Professional",
+    "alma_mater": "GMC Nagpur",
+    "skills": [
+      "Clinical Care",
+      "Patient Management"
+    ]
+  }
+]

@@ -26,9 +26,164 @@ const state = {
   filters: {
     search: '',
     cadre: 'MATCH_PROFILE',
+    specialty: 'MATCH_PROFILE',
     state: 'ALL',
     cityPop: 'ALL',
   },
+};
+
+const CADRE_DEGREES_MAP = {
+  DOCTOR: [
+    { value: 'MS', label: 'MS (Master of Surgery)' },
+    { value: 'MD', label: 'MD (Doctor of Medicine)' },
+    { value: 'DNB', label: 'DNB (Diplomate of National Board)' },
+    { value: 'MBBS', label: 'MBBS' },
+    { value: 'MCh', label: 'MCh (Surgical Super-Specialty)' },
+    { value: 'DM', label: 'DM (Medical Super-Specialty)' },
+  ],
+  DENTAL: [
+    { value: 'MDS', label: 'MDS (Master of Dental Surgery)' },
+    { value: 'BDS', label: 'BDS (Bachelor of Dental Surgery)' },
+  ],
+  NURSING: [
+    { value: 'B.Sc Nursing', label: 'B.Sc Nursing' },
+    { value: 'M.Sc Nursing', label: 'M.Sc Nursing' },
+    { value: 'Post-Basic B.Sc', label: 'Post-Basic B.Sc Nursing' },
+    { value: 'GNM', label: 'GNM (General Nursing & Midwifery)' },
+  ],
+};
+
+const DEGREE_BRANCH_OPTIONS = {
+  MS: [
+    'General Surgery',
+    'Orthopedics',
+    'Obstetrics & Gynecology',
+    'Ophthalmology',
+    'ENT (Otorhinolaryngology)',
+    'Trauma Surgery',
+  ],
+  MD: [
+    'General Medicine',
+    'Pediatrics',
+    'Radiodiagnosis / Radiology',
+    'Anesthesiology & Critical Care',
+    'Emergency Medicine',
+    'Pulmonary Medicine',
+    'Dermatology',
+    'Obstetrics & Gynecology',
+    'Community Medicine',
+  ],
+  DNB: [
+    'General Medicine',
+    'General Surgery',
+    'Orthopedics',
+    'Pediatrics',
+    'Radiodiagnosis / Radiology',
+    'Critical Care Medicine',
+    'Obstetrics & Gynecology',
+    'Anesthesiology & Critical Care',
+    'Emergency Medicine',
+  ],
+  MBBS: [
+    'General Practice / Medical Officer (GDMO)',
+    'Emergency & Casualty (RMO)',
+    'Junior Residency (General Medicine / Surgery)',
+    'ICU / Critical Care Junior Resident',
+  ],
+  MCh: [
+    'Surgical Gastroenterology / GI Surgery',
+    'Cardiothoracic & Vascular Surgery (CTVS)',
+    'Neurosurgery',
+    'Urology',
+    'Surgical Oncology',
+    'Plastic & Reconstructive Surgery',
+  ],
+  DM: [
+    'Cardiology',
+    'Critical Care Medicine',
+    'Medical Gastroenterology',
+    'Nephrology',
+    'Neurology',
+    'Neonatology',
+    'Medical Oncology',
+  ],
+  MDS: [
+    'Oral & Maxillofacial Surgery',
+    'Conservative Dentistry & Endodontics',
+    'Orthodontics & Dentofacial Orthopedics',
+    'Prosthodontics & Implantology',
+    'Periodontology',
+    'Pedodontics & Preventive Dentistry',
+  ],
+  BDS: [
+    'General Dentistry & Dental Surgeon',
+    'Oral Implantology & Aesthetic Dentistry',
+    'Endodontics & Restorative Dentistry',
+    'Hospital & Public Health Dentistry',
+  ],
+  'B.Sc Nursing': [
+    'Critical Care / ICU Nursing',
+    'NICU / PICU Pediatric Nursing',
+    'Operation Theatre (OT) Nursing',
+    'Emergency & Trauma Nursing',
+    'General Ward / Medical-Surgical Nursing',
+    'Infection Control Nursing',
+  ],
+  'Post-Basic B.Sc': [
+    'Critical Care / ICU Nursing',
+    'Operation Theatre (OT) Nursing',
+    'Emergency & Trauma Nursing',
+    'General Ward / Medical-Surgical Nursing',
+  ],
+  'M.Sc Nursing': [
+    'Critical Care / ICU Supervision',
+    'Nursing Education / Tutor / Lecturer',
+    'Infection Control & Nursing Administration',
+    'Obstetrics & Pediatric Nursing',
+    'Neuro-Critical Care Nursing',
+  ],
+  GNM: [
+    'Staff Nurse (General Ward / IPD)',
+    'ICU / Emergency Staff Nurse',
+    'Operation Theatre (OT) Staff Nurse',
+    'Obstetrics & Labour Room Nursing',
+  ],
+};
+
+const STATE_CITIES_MAP = {
+  'All India': [
+    'New Delhi',
+    'Mumbai',
+    'Bengaluru',
+    'Chennai',
+    'Hyderabad',
+    'Kolkata',
+    'Pune',
+    'Ahmedabad',
+    'Gurugram',
+    'Faridabad',
+    'Lucknow',
+    'Jaipur',
+    'Nagpur',
+    'Chandigarh',
+    'Bhubaneswar',
+    'Puducherry',
+    'Rishikesh',
+  ],
+  Delhi: ['New Delhi'],
+  Maharashtra: ['Mumbai', 'Pune', 'Nagpur'],
+  Karnataka: ['Bengaluru'],
+  'Tamil Nadu': ['Chennai', 'Coimbatore'],
+  Telangana: ['Hyderabad'],
+  Gujarat: ['Ahmedabad', 'Surat', 'Vadodara'],
+  'Uttar Pradesh': ['Lucknow', 'Kanpur'],
+  'West Bengal': ['Kolkata'],
+  Haryana: ['Gurugram', 'Faridabad'],
+  Rajasthan: ['Jaipur'],
+  Chandigarh: ['Chandigarh'],
+  Odisha: ['Bhubaneswar'],
+  Puducherry: ['Puducherry'],
+  Uttarakhand: ['Rishikesh'],
 };
 
 const METRO_40L_CITIES = new Set([
@@ -52,6 +207,7 @@ const METRO_40L_CITIES = new Set([
   'Vadodara',
   'Kochi',
   'Gurugram',
+  'Faridabad',
 ]);
 
 const HIRING_STAGES = [
@@ -64,7 +220,7 @@ const HIRING_STAGES = [
 const VIEW_META = {
   recommendations: {
     title: 'Eligible Roles For Your Qualification',
-    subtitle: 'Curated Govt/State DME & Private Hospital openings filtered by your degree, specialty, and experience.',
+    subtitle: 'Strictly filtered by your selected Degree, Field/Branch (e.g. MS Orthopedics, MD Medicine), and City/State.',
   },
   'gov-radar': {
     title: 'Live Govt & State DME Notifications',
@@ -135,8 +291,9 @@ function findJobWithEval(jobId) {
 
 function getEligibilityBadgeText(item) {
   const degrees = (item.degrees_accepted || []).slice(0, 3).join('/');
-  if (item._match && item._match.eligible === false) {
-    return `Requires ${degrees || item.cadre}`;
+  const m = item._match;
+  if (m && m.eligible === false) {
+    return `Other Branch · ${degrees || item.cadre}`;
   }
   return `Eligible · ${degrees || item.cadre}`;
 }
@@ -164,6 +321,71 @@ function saveUserProfileLocal(profile) {
   } catch (_) {}
 }
 
+function syncFiltersWithActiveProfile() {
+  const c = state.activeCandidate;
+  populateTopSpecialtyFilterOptions();
+  if (!c) {
+    state.filters.cadre = 'ALL';
+    state.filters.specialty = 'ALL';
+    state.filters.state = 'ALL';
+    state.filters.cityPop = 'ALL';
+  } else {
+    state.filters.cadre = 'MATCH_PROFILE';
+    state.filters.specialty = 'MATCH_PROFILE';
+    state.filters.state =
+      c.preferred_state && c.preferred_state !== 'All India' ? c.preferred_state : 'ALL';
+    state.filters.cityPop =
+      c.preferred_city && c.preferred_city !== 'ALL' ? c.preferred_city : 'ALL';
+  }
+
+  const cadEl = document.getElementById('filterCadre');
+  const specEl = document.getElementById('filterSpecialty');
+  const stEl = document.getElementById('filterState');
+  const cityEl = document.getElementById('filterCityPop');
+
+  if (cadEl) cadEl.value = state.filters.cadre;
+  if (specEl) specEl.value = state.filters.specialty;
+  if (stEl) stEl.value = state.filters.state;
+  if (cityEl) cityEl.value = state.filters.cityPop;
+}
+
+function populateTopSpecialtyFilterOptions() {
+  const specSelect = document.getElementById('filterSpecialty');
+  if (!specSelect) return;
+
+  const c = state.activeCandidate;
+  const activeDegree = c?.degree || null;
+  const degreeBranches = activeDegree && DEGREE_BRANCH_OPTIONS[activeDegree]
+    ? DEGREE_BRANCH_OPTIONS[activeDegree]
+    : [
+        'General Medicine',
+        'General Surgery',
+        'Orthopedics',
+        'Obstetrics & Gynecology',
+        'Pediatrics',
+        'Radiodiagnosis / Radiology',
+        'Anesthesiology & Critical Care',
+        'Emergency Medicine',
+        'Oral & Maxillofacial Surgery',
+        'Conservative Dentistry & Endodontics',
+        'Prosthodontics & Implantology',
+        'Critical Care / ICU Nursing',
+        'Operation Theatre (OT) Nursing',
+      ];
+
+  const matchLabel = c
+    ? `Branch: Match My Profile (${c.degree} - ${c.specialty})`
+    : 'Branch: Match My Profile';
+
+  specSelect.innerHTML = `
+    <option value="MATCH_PROFILE">${escapeHtml(matchLabel)}</option>
+    <option value="ALL">All Specialties / Branches</option>
+    ${degreeBranches
+      .map((b) => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`)
+      .join('')}
+  `;
+}
+
 async function bootstrap() {
   const res = await fetch('/api/bootstrap');
   const data = await res.json();
@@ -178,6 +400,7 @@ async function bootstrap() {
   // ZERO predefined profile on start — only load if this user previously saved their own profile
   state.activeCandidate = loadSavedUserProfile();
 
+  syncFiltersWithActiveProfile();
   renderActiveProfileBanner();
   updateSidebarScraperFooter();
   await refreshRecommendations();
@@ -197,19 +420,24 @@ function renderActiveProfileBanner() {
   if (!c) {
     if (avatarEl) avatarEl.textContent = '+';
     if (nameEl) nameEl.textContent = 'No Profile Set Yet';
-    if (badgeEl) badgeEl.textContent = 'Add your degree & specialty';
+    if (badgeEl) badgeEl.textContent = 'Select Degree, Branch & City';
     if (editBtn) editBtn.textContent = '+ Create My Profile';
     if (clearBtn) clearBtn.classList.add('hidden');
     if (mobPillText) mobPillText.textContent = '+ Set Up Profile';
     return;
   }
 
+  const locLabel =
+    c.preferred_city && c.preferred_city !== 'ALL'
+      ? c.preferred_city
+      : c.preferred_state || 'All India';
+
   if (avatarEl) avatarEl.textContent = getInitials(c.name);
   if (nameEl) nameEl.textContent = c.name;
-  if (badgeEl) badgeEl.textContent = `${c.degree} • ${c.specialty} (${c.experience_years ?? 0}y)`;
+  if (badgeEl) badgeEl.textContent = `${c.degree} (${c.specialty}) • ${locLabel}`;
   if (editBtn) editBtn.textContent = 'Update Profile';
   if (clearBtn) clearBtn.classList.remove('hidden');
-  if (mobPillText) mobPillText.textContent = `${c.name} (${c.degree}) ✎`;
+  if (mobPillText) mobPillText.textContent = `${c.name} · ${c.degree} (${c.specialty}) ✎`;
 }
 
 function updateSidebarScraperFooter() {
@@ -233,26 +461,68 @@ async function refreshRecommendations() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       candidate: state.activeCandidate || null,
-      options: { cadreFilter: false },
+      options: { cadreFilter: Boolean(state.activeCandidate) },
     }),
   });
   const data = await res.json();
   state.recommendations = data.recommendations || [];
 }
 
-function matchesGlobalFilters(item, options = {}) {
-  const { search, cadre, state: stFilter, cityPop } = state.filters;
+function doesItemMatchSpecialtyKeyword(item, targetSpec) {
+  if (!targetSpec || targetSpec === 'ALL') return true;
+  const cleanTarget = targetSpec.toLowerCase();
+  const hay = `${item.specialty || ''} ${item.title || ''} ${item.role_category || ''}`.toLowerCase();
+  if (hay.includes(cleanTarget)) return true;
 
-  if (options.defaultMatchProfileCadre && cadre === 'MATCH_PROFILE' && state.activeCandidate) {
-    if (item.cadre !== state.activeCandidate.cadre) return false;
+  // Check primary keywords inside parentheses/slashes (e.g. "Orthopedics", "General Surgery", "Obstetrics", "Radiodiagnosis", "ICU", "Implantology")
+  const tokens = cleanTarget
+    .replace(/[()/&-]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length >= 3 && !['and', 'the', 'for', 'nursing', 'doctor', 'medical', 'general', 'junior', 'senior'].includes(w));
+
+  if (cleanTarget.includes('general medicine') && (hay.includes('general medicine') || hay.includes('internal medicine'))) return true;
+  if (cleanTarget.includes('general surgery') && (hay.includes('general surgery') || hay.includes('laparoscopic'))) return true;
+  if (cleanTarget.includes('general practice') && (hay.includes('general practice') || hay.includes('medical officer') || hay.includes('gdmo') || hay.includes('rmo') || hay.includes('emergency'))) return true;
+  if (cleanTarget.includes('general dentistry') && (hay.includes('dentistry') || hay.includes('dental'))) return true;
+  if (cleanTarget.includes('general ward') && (hay.includes('general ward') || hay.includes('medical-surgical') || hay.includes('staff nurse') || hay.includes('nursing officer'))) return true;
+
+  return tokens.some((tk) => hay.includes(tk));
+}
+
+function matchesGlobalFilters(item, options = {}) {
+  const { search, cadre, specialty, state: stFilter, cityPop } = state.filters;
+  const c = state.activeCandidate;
+
+  // 1. Cadre & Degree Filter
+  if (cadre === 'MATCH_PROFILE' && c) {
+    if (item.cadre !== c.cadre) return false;
+    // Also enforce that the listing is degree-eligible for the user's degree (e.g. MS vs MD vs MBBS)
+    if (item.degreeEligible === false || item._match?.degreeEligible === false) {
+      return false;
+    }
   } else if (cadre !== 'ALL' && cadre !== 'MATCH_PROFILE') {
     if (item.cadre !== cadre) return false;
   }
 
+  // 2. Specialty / Branch Filter (Crucial: when user selects MS -> Orthopedics, filter to Orthopedics!)
+  if (specialty === 'MATCH_PROFILE' && c && c.specialty) {
+    const isSpecEligible =
+      item.specialtyEligible !== undefined
+        ? item.specialtyEligible
+        : item._match?.specialtyEligible !== undefined
+        ? item._match.specialtyEligible
+        : doesItemMatchSpecialtyKeyword(item, c.specialty);
+    if (!isSpecEligible) return false;
+  } else if (specialty && specialty !== 'ALL' && specialty !== 'MATCH_PROFILE') {
+    if (!doesItemMatchSpecialtyKeyword(item, specialty)) return false;
+  }
+
+  // 3. State Filter
   if (stFilter !== 'ALL') {
     if (item.state !== stFilter && item.state !== 'All India') return false;
   }
 
+  // 4. City Filter
   if (cityPop !== 'ALL') {
     const itemCity = String(item.city || '');
     const isMetro =
@@ -261,14 +531,21 @@ function matchesGlobalFilters(item, options = {}) {
       METRO_40L_CITIES.has(String(item.state || ''));
     if (cityPop === 'POP_40L_PLUS') {
       if (!isMetro) return false;
-    } else if (
-      itemCity.toLowerCase() !== cityPop.toLowerCase() &&
-      String(item.state || '').toLowerCase() !== cityPop.toLowerCase()
-    ) {
-      return false;
+    } else {
+      const cityLower = cityPop.toLowerCase();
+      const itemCityLower = itemCity.toLowerCase();
+      const itemStateLower = String(item.state || '').toLowerCase();
+      if (
+        !itemCityLower.includes(cityLower) &&
+        !cityLower.includes(itemCityLower || '__none__') &&
+        itemStateLower !== cityLower
+      ) {
+        return false;
+      }
     }
   }
 
+  // 5. Search Query Filter
   if (search.trim()) {
     const q = search.trim().toLowerCase();
     const hay = [
@@ -389,45 +666,77 @@ function renderEmptyState(message) {
   )}</div>`;
 }
 
+function getBranchesForDegree(degree) {
+  return DEGREE_BRANCH_OPTIONS[degree] || DEGREE_BRANCH_OPTIONS.MD;
+}
+
+function getCitiesForState(st) {
+  return STATE_CITIES_MAP[st] || STATE_CITIES_MAP['All India'];
+}
+
+function onQuickDegreeChange() {
+  const rawDeg = document.getElementById('quickDegree')?.value || 'DOCTOR|MS';
+  const [, degree] = rawDeg.split('|');
+  const branchSelect = document.getElementById('quickSpecialty');
+  if (!branchSelect) return;
+  const branches = getBranchesForDegree(degree);
+  branchSelect.innerHTML = branches
+    .map((b) => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`)
+    .join('');
+}
+
+function onQuickStateChange() {
+  const st = document.getElementById('quickState')?.value || 'All India';
+  const citySelect = document.getElementById('quickCity');
+  if (!citySelect) return;
+  const cities = getCitiesForState(st);
+  citySelect.innerHTML = `
+    <option value="ALL">${st === 'All India' ? 'All Cities (India)' : `All Cities in ${escapeHtml(st)}`}</option>
+    ${cities.map((ct) => `<option value="${escapeHtml(ct)}">${escapeHtml(ct)}</option>`).join('')}
+  `;
+}
+
 function renderOnboardingProfileBanner() {
   const banner = document.getElementById('onboardingProfileBanner');
   if (!banner) return;
 
   const c = state.activeCandidate;
   if (!c) {
+    const initialBranches = getBranchesForDegree('MS');
+    const initialCities = getCitiesForState('All India');
     banner.innerHTML = `
       <div class="onboarding-setup-card">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
           <div>
             <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px;">
               <span class="badge badge-match-mid">No Predefined Profile Loaded</span>
-              <span class="badge badge-sector">15-Sec Setup</span>
+              <span class="badge badge-sector">Select Degree → Field/Branch → City</span>
             </div>
-            <h3 style="font-size:15.5px;font-weight:700;color:var(--text-primary);">Set Up Your Clinical Profile to Filter Eligible Roles</h3>
+            <h3 style="font-size:15.5px;font-weight:700;color:var(--text-primary);">Choose Your Qualification, Branch &amp; City to Filter Roles</h3>
             <p style="font-size:12.5px;color:var(--text-secondary);">
-              Enter your qualification below (Allopathic Doctor, Dental BDS/MDS, or Nursing) to get personalized Govt/DME, Private Hospital, and Fellowship recommendations. You can update it anytime.
+              Select your Degree (e.g. MS, MD, MBBS, MDS, BDS, B.Sc Nursing), pick your exact Specialization Branch from the dropdown, and choose your preferred State/City.
             </p>
           </div>
           <button type="button" class="btn btn-outline" onclick="openProfileModalGlobal()">
-            Full Profile Form
+            Full Profile Editor
           </button>
         </div>
 
         <form class="quick-setup-grid" onsubmit="submitInlineQuickProfile(event)">
           <div class="form-field">
             <label for="quickName">Your Name</label>
-            <input type="text" id="quickName" placeholder="e.g. Dr. Aditi Rao / Sister Meera" required />
+            <input type="text" id="quickName" placeholder="e.g. Dr. Aditi Rao" required />
           </div>
           <div class="form-field">
-            <label for="quickDegree">Qualification</label>
-            <select id="quickDegree" required>
+            <label for="quickDegree">1. Qualification / Degree</label>
+            <select id="quickDegree" onchange="onQuickDegreeChange()" required>
               <optgroup label="Allopathic Doctors">
-                <option value="DOCTOR|MD">MD (Doctor of Medicine)</option>
                 <option value="DOCTOR|MS">MS (Master of Surgery)</option>
-                <option value="DOCTOR|DNB">DNB</option>
+                <option value="DOCTOR|MD">MD (Doctor of Medicine)</option>
+                <option value="DOCTOR|DNB">DNB (Diplomate of National Board)</option>
                 <option value="DOCTOR|MBBS">MBBS</option>
-                <option value="DOCTOR|DM">DM (Super-Specialty)</option>
-                <option value="DOCTOR|MCh">MCh (Super-Specialty)</option>
+                <option value="DOCTOR|MCh">MCh (Surgical Super-Specialty)</option>
+                <option value="DOCTOR|DM">DM (Medical Super-Specialty)</option>
               </optgroup>
               <optgroup label="Dental Professionals">
                 <option value="DENTAL|MDS">MDS (Master of Dental Surgery)</option>
@@ -436,20 +745,48 @@ function renderOnboardingProfileBanner() {
               <optgroup label="Nursing Officers &amp; Nurses">
                 <option value="NURSING|B.Sc Nursing">B.Sc Nursing</option>
                 <option value="NURSING|M.Sc Nursing">M.Sc Nursing</option>
+                <option value="NURSING|Post-Basic B.Sc">Post-Basic B.Sc Nursing</option>
                 <option value="NURSING|GNM">GNM</option>
               </optgroup>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="quickSpecialty">2. Field / Branch (In Selected Degree)</label>
+            <select id="quickSpecialty" required>
+              ${initialBranches.map((b) => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="quickState">3. Preferred State</label>
+            <select id="quickState" onchange="onQuickStateChange()">
+              <option value="All India">All India (Any State)</option>
+              <option value="Delhi">Delhi NCR</option>
+              <option value="Maharashtra">Maharashtra</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Tamil Nadu">Tamil Nadu</option>
+              <option value="Telangana">Telangana</option>
+              <option value="Gujarat">Gujarat</option>
+              <option value="Uttar Pradesh">Uttar Pradesh</option>
+              <option value="West Bengal">West Bengal</option>
+              <option value="Haryana">Haryana</option>
+              <option value="Rajasthan">Rajasthan</option>
+              <option value="Chandigarh">Chandigarh</option>
+              <option value="Odisha">Odisha</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="quickCity">4. Preferred City</label>
+            <select id="quickCity">
+              <option value="ALL">All Cities (India)</option>
+              ${initialCities.map((ct) => `<option value="${escapeHtml(ct)}">${escapeHtml(ct)}</option>`).join('')}
             </select>
           </div>
           <div class="form-field">
             <label for="quickExp">Exp (Yrs)</label>
             <input type="number" id="quickExp" min="0" max="40" value="1" required />
           </div>
-          <div class="form-field">
-            <label for="quickSpecialty">Specialty / Department</label>
-            <input type="text" id="quickSpecialty" placeholder="e.g. General Medicine, Oral Surgery, ICU" value="General Medicine" required />
-          </div>
           <button type="submit" class="btn btn-primary" style="min-height:38px;">
-            Save My Profile →
+            Apply &amp; Filter →
           </button>
         </form>
       </div>
@@ -457,21 +794,26 @@ function renderOnboardingProfileBanner() {
     return;
   }
 
+  const citySummary =
+    c.preferred_city && c.preferred_city !== 'ALL'
+      ? `${c.preferred_city}, ${c.preferred_state || 'India'}`
+      : c.preferred_state || 'All India';
+
   banner.innerHTML = `
     <div class="active-profile-bar">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <span class="badge badge-match-high">Active Profile</span>
+        <span class="badge badge-match-high">Filtered For Your Profile</span>
         <strong style="font-size:13.5px;">${escapeHtml(c.name)}</strong>
         <span style="color:var(--text-secondary);font-size:13px;">
-          ${escapeHtml(c.degree)} · ${escapeHtml(c.specialty)} · ${escapeHtml(c.experience_years ?? 0)} yrs exp · Prefers ${escapeHtml(c.preferred_state || 'All India')}
+          <strong>${escapeHtml(c.degree)}</strong> in <strong>${escapeHtml(c.specialty)}</strong> · ${escapeHtml(c.experience_years ?? 0)} yrs exp · Location: <strong>${escapeHtml(citySummary)}</strong>
         </span>
       </div>
-      <div style="display:flex;gap:8px;align-items:center;">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
         <button type="button" class="btn btn-outline" style="padding:5px 10px;font-size:12px;" onclick="openProfileModalGlobal()">
-          Update Profile ✎
+          Change Degree / Branch / City ✎
         </button>
         <button type="button" class="btn-ghost-sm" style="font-size:12px;" onclick="clearUserProfile()">
-          Reset
+          Clear Profile
         </button>
       </div>
     </div>
@@ -481,10 +823,12 @@ function renderOnboardingProfileBanner() {
 async function submitInlineQuickProfile(event) {
   event.preventDefault();
   const name = document.getElementById('quickName')?.value?.trim() || 'Clinician';
-  const rawDeg = document.getElementById('quickDegree')?.value || 'DOCTOR|MD';
+  const rawDeg = document.getElementById('quickDegree')?.value || 'DOCTOR|MS';
   const [cadre, degree] = rawDeg.split('|');
+  const specialty = document.getElementById('quickSpecialty')?.value || 'General Surgery';
+  const preferred_state = document.getElementById('quickState')?.value || 'All India';
+  const preferred_city = document.getElementById('quickCity')?.value || 'ALL';
   const experience_years = Number(document.getElementById('quickExp')?.value ?? 1);
-  const specialty = document.getElementById('quickSpecialty')?.value?.trim() || 'General Medicine';
 
   const payload = {
     id: state.activeCandidate?.id || `cand-${Date.now()}`,
@@ -493,8 +837,9 @@ async function submitInlineQuickProfile(event) {
     degree,
     specialty,
     experience_years,
-    age: 28,
-    preferred_state: 'Delhi',
+    age: 29,
+    preferred_state,
+    preferred_city,
     alma_mater: 'Recognized Medical/Dental/Nursing Institute',
     interested_in_fellowships: true,
   };
@@ -507,19 +852,21 @@ async function submitInlineQuickProfile(event) {
   const data = await res.json();
   state.activeCandidate = data.profile;
   saveUserProfileLocal(data.profile);
+  syncFiltersWithActiveProfile();
   renderActiveProfileBanner();
   await refreshRecommendations();
   renderAllViews();
-  showToast(`Profile saved for ${data.profile.name} (${data.profile.degree})`);
+  showToast(`Filtered for ${data.profile.degree} (${data.profile.specialty})`);
 }
 
 async function clearUserProfile() {
   state.activeCandidate = null;
   saveUserProfileLocal(null);
+  syncFiltersWithActiveProfile();
   renderActiveProfileBanner();
   await refreshRecommendations();
   renderAllViews();
-  showToast('Profile cleared — showing all live openings');
+  showToast('Profile cleared — showing all 44 live openings');
 }
 
 function renderRecommendationsView() {
@@ -547,9 +894,45 @@ function renderRecommendationsView() {
   }
 
   document.getElementById('tabCountRecs').textContent = list.length;
-  container.innerHTML = list.length
-    ? list.map((item) => renderJobRow(item)).join('')
-    : renderEmptyState('No openings match your current filters. Click Reset to view all eligible roles.');
+
+  if (list.length > 0) {
+    container.innerHTML = list.map((item) => renderJobRow(item)).join('');
+    return;
+  }
+
+  // If 0 roles matched in the specific City/State, check if there are openings for this exact Degree + Branch across All India
+  const panIndiaBranchMatches = state.recommendations.filter((r) => {
+    const c = state.activeCandidate;
+    if (c && r.cadre !== c.cadre) return false;
+    if (c && (r.degreeEligible === false || r._match?.degreeEligible === false)) return false;
+    if (c && c.specialty) {
+      const specOk =
+        r.specialtyEligible !== undefined
+          ? r.specialtyEligible
+          : r._match?.specialtyEligible !== undefined
+          ? r._match.specialtyEligible
+          : doesItemMatchSpecialtyKeyword(r, c.specialty);
+      if (!specOk) return false;
+    }
+    return true;
+  });
+
+  if (panIndiaBranchMatches.length > 0 && (state.filters.state !== 'ALL' || state.filters.cityPop !== 'ALL')) {
+    const locName =
+      state.filters.cityPop !== 'ALL' ? state.filters.cityPop : state.filters.state;
+    container.innerHTML = `
+      <div style="padding:14px 16px;background:var(--amber-soft);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px;">
+        <span>No active openings in <strong>${escapeHtml(locName)}</strong> for <strong>${escapeHtml(state.activeCandidate?.degree || '')} (${escapeHtml(state.activeCandidate?.specialty || 'selected branch')})</strong> right now — showing <strong>${panIndiaBranchMatches.length} eligible openings in your branch across India</strong>:</span>
+        <button class="btn btn-outline" style="padding:4px 10px;font-size:12px;" onclick="document.getElementById('filterState').value='ALL';document.getElementById('filterCityPop').value='ALL';state.filters.state='ALL';state.filters.cityPop='ALL';renderAllViews();">Show All India</button>
+      </div>
+      ${panIndiaBranchMatches.map((item) => renderJobRow(item)).join('')}
+    `;
+    return;
+  }
+
+  container.innerHTML = renderEmptyState(
+    'No openings match your current filters. Click Reset to view all eligible roles.'
+  );
 }
 
 function renderGovRadarView() {
@@ -1533,8 +1916,25 @@ function setupEventListeners() {
     state.filters.cadre = e.target.value;
     renderAllViews();
   });
+  document.getElementById('filterSpecialty')?.addEventListener('change', (e) => {
+    state.filters.specialty = e.target.value;
+    renderAllViews();
+  });
   document.getElementById('filterState').addEventListener('change', (e) => {
     state.filters.state = e.target.value;
+    // Dynamically update top City dropdown to show cities in the selected State
+    const citySelect = document.getElementById('filterCityPop');
+    if (citySelect) {
+      const stVal = e.target.value;
+      const cities = stVal === 'ALL' ? STATE_CITIES_MAP['All India'] : getCitiesForState(stVal);
+      citySelect.innerHTML = `
+        <option value="ALL">${stVal === 'ALL' ? 'City: All Cities' : `City: All in ${escapeHtml(stVal)}`}</option>
+        <option value="POP_40L_PLUS">★ &gt;40–50L+ Population Metro Hubs</option>
+        ${cities.map((ct) => `<option value="${escapeHtml(ct)}">${escapeHtml(ct)}</option>`).join('')}
+      `;
+      state.filters.cityPop = 'ALL';
+      citySelect.value = 'ALL';
+    }
     renderAllViews();
   });
   document.getElementById('filterCityPop').addEventListener('change', (e) => {
@@ -1543,9 +1943,18 @@ function setupEventListeners() {
   });
 
   document.getElementById('resetFiltersBtn').addEventListener('click', () => {
-    state.filters = { search: '', cadre: 'MATCH_PROFILE', state: 'ALL', cityPop: 'ALL' };
+    state.filters = {
+      search: '',
+      cadre: 'ALL',
+      specialty: 'ALL',
+      state: 'ALL',
+      cityPop: 'ALL',
+    };
     document.getElementById('filterSearch').value = '';
-    document.getElementById('filterCadre').value = 'MATCH_PROFILE';
+    document.getElementById('filterCadre').value = 'ALL';
+    if (document.getElementById('filterSpecialty')) {
+      document.getElementById('filterSpecialty').value = 'ALL';
+    }
     document.getElementById('filterState').value = 'ALL';
     document.getElementById('filterCityPop').value = 'ALL';
     renderAllViews();
@@ -1588,28 +1997,17 @@ function setupEventListeners() {
   document.getElementById('mobileEditProfileBtn')?.addEventListener('click', openProfileModalGlobal);
   document.getElementById('clearProfileBtn')?.addEventListener('click', clearUserProfile);
 
-  // Auto-sync default degree when cadre changes in the Profile Modal
+  // Cascading Cadre -> Degree -> Field/Branch in Profile Modal
   document.getElementById('profCadre')?.addEventListener('change', (e) => {
-    const cadreVal = e.target.value;
-    const degEl = document.getElementById('profDegree');
-    const specEl = document.getElementById('profSpecialty');
-    if (!degEl) return;
-    if (cadreVal === 'DENTAL') {
-      degEl.value = 'MDS';
-      if (specEl && (!specEl.value || specEl.value === 'General Medicine')) {
-        specEl.value = 'Oral & Maxillofacial Surgery';
-      }
-    } else if (cadreVal === 'NURSING') {
-      degEl.value = 'B.Sc Nursing';
-      if (specEl && (!specEl.value || specEl.value === 'General Medicine')) {
-        specEl.value = 'Critical Care / ICU Nursing';
-      }
-    } else {
-      degEl.value = 'MD';
-      if (specEl && !specEl.value) {
-        specEl.value = 'General Medicine';
-      }
-    }
+    populateModalDegreesForCadre(e.target.value);
+  });
+
+  document.getElementById('profDegree')?.addEventListener('change', (e) => {
+    populateModalBranchesForDegree(e.target.value);
+  });
+
+  document.getElementById('profState')?.addEventListener('change', (e) => {
+    populateModalCitiesForState(e.target.value);
   });
 
   document.getElementById('profileForm').addEventListener('submit', async (e) => {
@@ -1621,8 +2019,9 @@ function setupEventListeners() {
       degree: document.getElementById('profDegree').value,
       specialty: document.getElementById('profSpecialty').value,
       experience_years: Number(document.getElementById('profExp').value),
-      age: Number(document.getElementById('profAge').value),
+      age: Number(document.getElementById('profAge')?.value || 29),
       preferred_state: document.getElementById('profState').value,
+      preferred_city: document.getElementById('profCity')?.value || 'ALL',
       alma_mater: document.getElementById('profAlmaMater').value,
       interested_in_fellowships: document.getElementById('profFellowship').checked,
     };
@@ -1635,6 +2034,7 @@ function setupEventListeners() {
     state.candidates = data.candidates || state.candidates;
     state.activeCandidate = data.profile;
     saveUserProfileLocal(data.profile);
+    syncFiltersWithActiveProfile();
     renderActiveProfileBanner();
     await refreshRecommendations();
     renderAllViews();
@@ -1642,7 +2042,13 @@ function setupEventListeners() {
       renderFullJobPage(decodeURIComponent(window.location.hash.slice('#/job/'.length)));
     }
     document.getElementById('profileModal').classList.add('hidden');
-    showToast(`Saved profile for ${data.profile.name} (${data.profile.degree})`);
+    showToast(
+      `Filtered for ${data.profile.degree} (${data.profile.specialty}) · ${
+        data.profile.preferred_city && data.profile.preferred_city !== 'ALL'
+          ? data.profile.preferred_city
+          : data.profile.preferred_state
+      }`
+    );
   });
 
   const openPostModal = () => {
@@ -1689,26 +2095,72 @@ function setupEventListeners() {
   });
 }
 
+function populateModalDegreesForCadre(cadreVal, selectedDegree = null) {
+  const degEl = document.getElementById('profDegree');
+  if (!degEl) return;
+  const degrees = CADRE_DEGREES_MAP[cadreVal] || CADRE_DEGREES_MAP.DOCTOR;
+  degEl.innerHTML = degrees
+    .map((d) => `<option value="${escapeHtml(d.value)}">${escapeHtml(d.label)}</option>`)
+    .join('');
+  const targetDegree =
+    selectedDegree && degrees.some((d) => d.value === selectedDegree)
+      ? selectedDegree
+      : degrees[0].value;
+  degEl.value = targetDegree;
+  populateModalBranchesForDegree(targetDegree);
+}
+
+function populateModalBranchesForDegree(degreeVal, selectedBranch = null) {
+  const specEl = document.getElementById('profSpecialty');
+  if (!specEl) return;
+  const branches = getBranchesForDegree(degreeVal);
+  specEl.innerHTML = branches
+    .map((b) => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`)
+    .join('');
+  if (selectedBranch && branches.includes(selectedBranch)) {
+    specEl.value = selectedBranch;
+  } else {
+    specEl.value = branches[0];
+  }
+}
+
+function populateModalCitiesForState(stateVal, selectedCity = 'ALL') {
+  const cityEl = document.getElementById('profCity');
+  if (!cityEl) return;
+  const cities = getCitiesForState(stateVal);
+  cityEl.innerHTML = `
+    <option value="ALL">${stateVal === 'All India' ? 'All Cities (Any City)' : `All Cities in ${escapeHtml(stateVal)}`}</option>
+    ${cities.map((ct) => `<option value="${escapeHtml(ct)}">${escapeHtml(ct)}</option>`).join('')}
+  `;
+  if (selectedCity && (selectedCity === 'ALL' || cities.includes(selectedCity))) {
+    cityEl.value = selectedCity;
+  } else {
+    cityEl.value = 'ALL';
+  }
+}
+
 function openProfileModalGlobal() {
   const c = state.activeCandidate;
   if (c) {
     document.getElementById('profName').value = c.name || '';
-    document.getElementById('profCadre').value = c.cadre || 'DOCTOR';
-    document.getElementById('profDegree').value = c.degree || 'MD';
-    document.getElementById('profSpecialty').value = c.specialty || '';
+    const cadVal = c.cadre || 'DOCTOR';
+    document.getElementById('profCadre').value = cadVal;
+    populateModalDegreesForCadre(cadVal, c.degree || 'MS');
+    populateModalBranchesForDegree(c.degree || 'MS', c.specialty);
+    const stVal = c.preferred_state || 'All India';
+    document.getElementById('profState').value = stVal;
+    populateModalCitiesForState(stVal, c.preferred_city || 'ALL');
     document.getElementById('profExp').value = c.experience_years ?? 1;
-    document.getElementById('profAge').value = c.age ?? 28;
-    document.getElementById('profState').value = c.preferred_state || 'Delhi';
     document.getElementById('profAlmaMater').value = c.alma_mater || '';
-    document.getElementById('profFellowship').checked = Boolean(c.interested_in_fellowships);
+    document.getElementById('profFellowship').checked = Boolean(c.interested_in_fellowships ?? true);
   } else {
     document.getElementById('profName').value = '';
     document.getElementById('profCadre').value = 'DOCTOR';
-    document.getElementById('profDegree').value = 'MD';
-    document.getElementById('profSpecialty').value = 'General Medicine';
+    populateModalDegreesForCadre('DOCTOR', 'MS');
+    populateModalBranchesForDegree('MS', 'General Surgery');
+    document.getElementById('profState').value = 'All India';
+    populateModalCitiesForState('All India', 'ALL');
     document.getElementById('profExp').value = 1;
-    document.getElementById('profAge').value = 28;
-    document.getElementById('profState').value = 'Delhi';
     document.getElementById('profAlmaMater').value = '';
     document.getElementById('profFellowship').checked = true;
   }
@@ -1727,6 +2179,8 @@ window.triggerLiveQaRun = triggerLiveQaRun;
 window.openProfileModalGlobal = openProfileModalGlobal;
 window.submitInlineQuickProfile = submitInlineQuickProfile;
 window.clearUserProfile = clearUserProfile;
+window.onQuickDegreeChange = onQuickDegreeChange;
+window.onQuickStateChange = onQuickStateChange;
 
 document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();

@@ -144,15 +144,20 @@
             <select id="filterCadre" class="facet-select" aria-label="Filter by Cadre">
               <option value="MATCH_PROFILE">Cadre: Match My Profile</option>
               <option value="ALL">All Cadres (Doc / Dental / Nurse)</option>
-              <option value="DOCTOR">Allopathic Doctors (MBBS/MD/MS/DM)</option>
+              <option value="DOCTOR">Allopathic Doctors (MBBS/MD/MS/DM/MCh)</option>
               <option value="DENTAL">Dental (BDS / MDS)</option>
               <option value="NURSING">Nursing (B.Sc / M.Sc / GNM)</option>
             </select>
 
+            <select id="filterSpecialty" class="facet-select" aria-label="Filter by Specialty Branch">
+              <option value="MATCH_PROFILE">Branch: Match My Profile</option>
+              <option value="ALL">All Specialties / Branches</option>
+            </select>
+
             <select id="filterState" class="facet-select" aria-label="Filter by State">
               <option value="ALL">State: All India</option>
-              <option value="Maharashtra">Maharashtra</option>
               <option value="Delhi">Delhi NCR</option>
+              <option value="Maharashtra">Maharashtra</option>
               <option value="Karnataka">Karnataka</option>
               <option value="Tamil Nadu">Tamil Nadu</option>
               <option value="Telangana">Telangana</option>
@@ -164,30 +169,29 @@
               <option value="Chandigarh">Chandigarh</option>
               <option value="Puducherry">Puducherry</option>
               <option value="Odisha">Odisha</option>
+              <option value="Uttarakhand">Uttarakhand</option>
             </select>
 
-            <select id="filterCityPop" class="facet-select" aria-label="Filter by City Population Hub">
-              <option value="ALL">City: All Hubs</option>
+            <select id="filterCityPop" class="facet-select" aria-label="Filter by City">
+              <option value="ALL">City: All Cities</option>
               <option value="POP_40L_PLUS">★ &gt;40–50L+ Population Metro Hubs</option>
-              <option value="Mumbai">Mumbai (212L+)</option>
-              <option value="New Delhi">New Delhi (320L+ NCR)</option>
-              <option value="Bengaluru">Bengaluru (140L+)</option>
-              <option value="Kolkata">Kolkata (153L+)</option>
-              <option value="Chennai">Chennai (118L+)</option>
-              <option value="Hyderabad">Hyderabad (110L+)</option>
-              <option value="Ahmedabad">Ahmedabad (88L+)</option>
-              <option value="Surat">Surat (78L+)</option>
-              <option value="Pune">Pune (74L+)</option>
-              <option value="Lucknow">Lucknow (46L+)</option>
-              <option value="Jaipur">Jaipur (45L+)</option>
-              <option value="Gurugram">Gurugram (45L+)</option>
-              <option value="Nagpur">Nagpur (42L+)</option>
-              <option value="Kanpur">Kanpur (42L+)</option>
-              <option value="Indore">Indore (42L+)</option>
-              <option value="Visakhapatnam">Visakhapatnam (42L+)</option>
-              <option value="Coimbatore">Coimbatore (41L+)</option>
-              <option value="Vadodara">Vadodara (41L+)</option>
-              <option value="Kochi">Kochi (41L+)</option>
+              <option value="New Delhi">New Delhi (NCR)</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Bengaluru">Bengaluru</option>
+              <option value="Chennai">Chennai</option>
+              <option value="Hyderabad">Hyderabad</option>
+              <option value="Kolkata">Kolkata</option>
+              <option value="Pune">Pune</option>
+              <option value="Ahmedabad">Ahmedabad</option>
+              <option value="Gurugram">Gurugram</option>
+              <option value="Faridabad">Faridabad</option>
+              <option value="Lucknow">Lucknow</option>
+              <option value="Jaipur">Jaipur</option>
+              <option value="Nagpur">Nagpur</option>
+              <option value="Chandigarh">Chandigarh</option>
+              <option value="Bhubaneswar">Bhubaneswar</option>
+              <option value="Puducherry">Puducherry</option>
+              <option value="Rishikesh">Rishikesh</option>
             </select>
 
             <button id="resetFiltersBtn" class="btn-ghost-sm">Reset</button>
@@ -293,21 +297,21 @@
     </aside>
   </div>
 
-  <!-- MODAL: Edit / Create Candidate Profile -->
+  <!-- MODAL: Edit / Create Candidate Profile (Dynamic Cascading Degree -> Field/Branch -> State -> City) -->
   <div id="profileModal" class="modal-backdrop hidden">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>Clinician Profile &amp; Preferences</h3>
+        <h3>Clinician Profile &amp; Filter Preferences</h3>
         <button class="btn-close" data-close="profileModal">&times;</button>
       </div>
       <form id="profileForm" class="modal-form">
         <div class="form-row">
           <div class="form-field">
-            <label>Full Name</label>
-            <input type="text" id="profName" required />
+            <label for="profName">Full Name</label>
+            <input type="text" id="profName" placeholder="e.g. Dr. Rohan Verma" required />
           </div>
           <div class="form-field">
-            <label>Healthcare Cadre</label>
+            <label for="profCadre">Healthcare Profession / Cadre</label>
             <select id="profCadre" required>
               <option value="DOCTOR">Allopathic Doctor (MBBS / MD / MS / DNB / DM / MCh)</option>
               <option value="DENTAL">Dental Professional (BDS / MDS)</option>
@@ -318,44 +322,21 @@
 
         <div class="form-row">
           <div class="form-field">
-            <label>Highest Qualification</label>
-            <select id="profDegree" required>
-              <option value="MBBS">MBBS</option>
-              <option value="MD">MD</option>
-              <option value="MS">MS</option>
-              <option value="DNB">DNB</option>
-              <option value="DM">DM</option>
-              <option value="MCh">MCh</option>
-              <option value="BDS">BDS</option>
-              <option value="MDS">MDS</option>
-              <option value="B.Sc Nursing">B.Sc Nursing</option>
-              <option value="Post-Basic B.Sc">Post-Basic B.Sc Nursing</option>
-              <option value="M.Sc Nursing">M.Sc Nursing</option>
-              <option value="GNM">GNM</option>
-            </select>
+            <label for="profDegree">Qualification / Degree</label>
+            <select id="profDegree" required></select>
           </div>
           <div class="form-field">
-            <label>Specialty / Department</label>
-            <input type="text" id="profSpecialty" required />
+            <label for="profSpecialty">Field / Specialization Branch (Based on Degree)</label>
+            <select id="profSpecialty" required></select>
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-field">
-            <label>Experience (Years)</label>
-            <input type="number" id="profExp" min="0" max="40" value="1" required />
-          </div>
-          <div class="form-field">
-            <label>Age (Years)</label>
-            <input type="number" id="profAge" min="20" max="68" value="28" required />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label>Preferred State</label>
+            <label for="profState">Preferred State</label>
             <select id="profState">
-              <option value="Delhi">Delhi</option>
+              <option value="All India">All India (Any State)</option>
+              <option value="Delhi">Delhi NCR</option>
               <option value="Maharashtra">Maharashtra</option>
               <option value="Karnataka">Karnataka</option>
               <option value="Tamil Nadu">Tamil Nadu</option>
@@ -366,24 +347,41 @@
               <option value="Haryana">Haryana</option>
               <option value="Rajasthan">Rajasthan</option>
               <option value="Chandigarh">Chandigarh</option>
+              <option value="Odisha">Odisha</option>
+              <option value="Puducherry">Puducherry</option>
+              <option value="Uttarakhand">Uttarakhand</option>
             </select>
           </div>
           <div class="form-field">
-            <label>Alma Mater / Current Hospital</label>
-            <input type="text" id="profAlmaMater" />
+            <label for="profCity">Preferred City (Optional)</label>
+            <select id="profCity">
+              <option value="ALL">All Cities in Selected State</option>
+            </select>
           </div>
         </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="profExp">Post-Degree Experience (Years)</label>
+            <input type="number" id="profExp" min="0" max="40" value="1" required />
+          </div>
+          <div class="form-field">
+            <label for="profAlmaMater">Alma Mater / Current Hospital</label>
+            <input type="text" id="profAlmaMater" placeholder="e.g. AIIMS / KEM Mumbai / Manipal" />
+          </div>
+        </div>
+        <input type="hidden" id="profAge" value="29" />
 
         <div class="form-field checkbox-field">
           <label>
             <input type="checkbox" id="profFellowship" checked />
-            <span>Include Fellowships &amp; Super-Specialty Training in recommendations</span>
+            <span>Include Fellowships &amp; Super-Specialty Training in my filtered feed</span>
           </label>
         </div>
 
         <div class="modal-footer">
           <button type="button" class="btn btn-outline" data-close="profileModal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save Profile</button>
+          <button type="submit" class="btn btn-primary">Save &amp; Filter Openings →</button>
         </div>
       </form>
     </div>

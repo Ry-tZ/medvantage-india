@@ -1,15 +1,13 @@
 /**
- * MedVantage India — Multi-Cadre Qualification & Experience Recommendation Engine
+ * MedVantage India — Multi-Cadre Qualification, Branch & City Recommendation Engine
  * (`backend/matching_engine.js`)
  *
- * Implements `.agents/skills/doctor-job-matching/SKILL.md`:
+ * Implements strict Degree -> Branch/Specialty -> City/State eligibility & filtering:
  * - Supports Allopathic Doctors (`DOCTOR`: MBBS, MD, MS, DNB, DM, MCh),
  *   Dental Professionals (`DENTAL`: BDS, MDS),
  *   Nurses (`NURSING`: B.Sc Nursing, M.Sc Nursing, Post-Basic B.Sc, GNM, ANM),
  *   and Fellowships (`is_fellowship: true` across all 3 cadres).
  * - Matches across both Live Government / State DME notifications and Private Hospital Direct-Apply openings.
- * - Composite Match Score (0 - 100):
- *   MatchScore = 0.35 * S_cadre_degree + 0.25 * S_specialty + 0.20 * S_experience + 0.10 * S_location + 0.10 * S_track_preference
  */
 
 'use strict';
@@ -65,64 +63,87 @@ function inferCadreFromDegree(degree) {
 }
 
 const SPECIALTY_SYNONYM_GROUPS = [
-  ['general medicine', 'internal medicine', 'medicine', 'diabetology', 'metabolic', 'general practice', 'gdmo', 'rmo'],
-  ['critical care', 'icu', 'intensive care', 'anesthesiology', 'anesthesia', 'emergency', 'trauma', 'pulmonary', 'ecmo'],
-  ['pediatrics', 'paediatrics', 'neonatology', 'nicu', 'picu', 'child health', 'pediatric cardiac'],
-  ['orthopedics', 'orthopaedics', 'joint replacement', 'arthroplasty', 'sports medicine', 'spine', 'trauma surgery'],
+  ['general medicine', 'internal medicine', 'diabetology', 'metabolic', 'infectious', 'physician'],
+  ['general surgery', 'laparoscopic', 'minimal access', 'gastrointestinal surgery', 'surgical', 'trauma surgery'],
+  ['orthopedics', 'orthopaedics', 'joint replacement', 'arthroplasty', 'sports medicine', 'spine'],
   ['obstetrics', 'gynecology', 'obgyn', 'obg', 'fetomaternal', 'maternity', 'reproductive', 'ivf'],
+  ['pediatrics', 'paediatrics', 'neonatology', 'nicu', 'picu', 'child health', 'pediatric cardiac'],
   ['radiology', 'radio-diagnosis', 'radiodiagnosis', 'imaging', 'mri', 'ct', 'interventional radiology'],
-  ['general surgery', 'surgery', 'minimal access', 'laparoscopic', 'gastrointestinal surgery'],
-  ['cardiology', 'cardiac', 'ctvs', 'cardiothoracic'],
-  ['endodontics', 'conservative dentistry', 'root canal', 'general dentistry', 'dental surgeon', 'aesthetic dentistry'],
-  ['prosthodontics', 'implantology', 'crown', 'bridge', 'full-mouth', 'oral implantology'],
-  ['oral & maxillofacial surgery', 'maxillofacial', 'oral surgery', 'facial trauma'],
+  ['anesthesiology', 'anesthesia', 'critical care', 'icu', 'intensive care', 'pain', 'palliative', 'ecmo'],
+  ['emergency medicine', 'emergency', 'casualty', 'trauma', 'rmo', 'gdmo', 'general practice', 'medical officer'],
+  ['dermatology', 'venereology', 'skin', 'cosmetology'],
+  ['ophthalmology', 'eye', 'cataract', 'retina'],
+  ['ent', 'otorhinolaryngology', 'head & neck', 'otolaryngology'],
+  ['pulmonary medicine', 'respiratory', 'chest', 'tb', 'pulmonology'],
+  ['cardiology', 'cardiac', 'ctvs', 'cardiothoracic', 'interventional cardiology'],
+  ['gastroenterology', 'hepatology', 'gi endoscopy', 'endoscopy'],
+  ['nephrology', 'dialysis', 'renal'],
+  ['neurology', 'neurosurgery', 'neuro-critical', 'stroke'],
+  ['oncology', 'surgical oncology', 'medical oncology', 'radiation oncology'],
+  ['oral & maxillofacial surgery', 'maxillofacial', 'oral surgery', 'facial trauma', 'onco-reconstruction'],
+  ['conservative dentistry', 'endodontics', 'root canal', 'micro-endodontics', 'aesthetic dentistry'],
+  ['prosthodontics', 'implantology', 'oral implantology', 'crown', 'bridge', 'full-mouth'],
   ['orthodontics', 'aligners', 'dentofacial'],
-  ['critical care nursing', 'icu nursing', 'nicu nursing', 'emergency nursing', 'ot nursing', 'operation theatre', 'staff nurse', 'nursing officer'],
-  ['infection control', 'nursing administration', 'nursing supervisor', 'nurse educator', 'nursing tutor', 'medical-surgical'],
+  ['periodontology', 'periodontics', 'pedodontics', 'pediatric dentistry', 'public health dentistry', 'general dentistry', 'dental surgeon', 'dentistry'],
+  ['critical care nursing', 'icu nursing', 'nicu', 'picu', 'emergency nursing', 'trauma nursing', 'stroke icu'],
+  ['ot nursing', 'operation theatre', 'surgical nursing', 'perioperative'],
+  ['medical-surgical nursing', 'general ward', 'staff nurse', 'nursing officer', 'dialysis', 'obstetrics & labour'],
+  ['nursing education', 'nursing administration', 'infection control', 'nursing tutor', 'clinical instructor', 'supervision'],
 ];
 
+/**
+ * Evaluates whether a listing's specialty matches the clinician's selected branch/specialty.
+ * Returns { score, badge, isSpecialtyMatch } so non-matching specialties can be strictly separated!
+ */
 function evaluateSpecialtyFit(candidateSpecialty, listingSpecialty, listingTitle, listingRoleCategory) {
   const candSpec = String(candidateSpecialty || '').trim().toLowerCase();
   const listSpec = String(listingSpecialty || '').trim().toLowerCase();
   const listContext = `${listSpec} ${String(listingTitle || '').toLowerCase()} ${String(listingRoleCategory || '').toLowerCase()}`;
 
   if (!candSpec || candSpec === 'all' || candSpec === 'any') {
-    return { score: 80, badge: `Broad Specialty Fit (${listingSpecialty || 'Multi-Specialty'})` };
+    return {
+      score: 90,
+      badge: `Specialty: ${listingSpecialty || 'Multi-Specialty'}`,
+      isSpecialtyMatch: true,
+    };
   }
 
+  // Direct substring match (e.g. "Orthopedics" in "General Medicine, Orthopedics, Pediatrics")
   if (
     listSpec.includes(candSpec) ||
     candSpec.includes(listSpec) ||
     listContext.includes(candSpec)
   ) {
-    return { score: 100, badge: `Exact Specialty Match: ${listingSpecialty}` };
+    return {
+      score: 100,
+      badge: `Exact Branch Match: ${candidateSpecialty}`,
+      isSpecialtyMatch: true,
+    };
   }
 
-  if (
-    listSpec.includes('all ') ||
-    listSpec.includes('multi') ||
-    listSpec.includes('general') ||
-    candSpec.includes('general')
-  ) {
-    for (const group of SPECIALTY_SYNONYM_GROUPS) {
-      const candInGroup = group.some((kw) => candSpec.includes(kw));
-      const listInGroup = group.some((kw) => listContext.includes(kw));
-      if (candInGroup && listInGroup) {
-        return { score: 92, badge: `Aligned Clinical Specialty (${listingSpecialty})` };
-      }
-    }
-    return { score: 78, badge: `General / Broad Specialty Opening (${listingSpecialty})` };
-  }
-
+  // Token / synonym group match (e.g., "General Surgery" matches "Laparoscopic Surgery", "OBGYN" matches "Obstetrics & Gynecology")
   for (const group of SPECIALTY_SYNONYM_GROUPS) {
     const candInGroup = group.some((kw) => candSpec.includes(kw));
     const listInGroup = group.some((kw) => listContext.includes(kw));
     if (candInGroup && listInGroup) {
-      return { score: 88, badge: `Related Specialty Track (${listingSpecialty})` };
+      return {
+        score: 94,
+        badge: `Aligned Branch (${candidateSpecialty})`,
+        isSpecialtyMatch: true,
+      };
     }
   }
 
-  return { score: 35, badge: null };
+  // Multi-department Govt/DME advertisements that explicitly say "All Broad Specialties" or "All Departments"
+  if (listSpec.includes('all ') || listSpec.includes('multi-specialty')) {
+    return {
+      score: 84,
+      badge: `Multi-Department Notification (${listingSpecialty})`,
+      isSpecialtyMatch: true,
+    };
+  }
+
+  return { score: 15, badge: null, isSpecialtyMatch: false };
 }
 
 function scoreListingForCandidate(candidate = {}, listing = {}) {
@@ -150,26 +171,14 @@ function scoreListingForCandidate(candidate = {}, listing = {}) {
   const candidateState = String(
     candidate.preferred_state || candidate.state || ''
   ).trim();
-  const candidateStatesList = Array.isArray(candidate.preferred_states)
-    ? candidate.preferred_states.map((s) => String(s).trim().toLowerCase())
-    : candidateState
-    ? [candidateState.toLowerCase()]
-    : [];
-  const candidateCity = String(candidate.preferred_city || candidate.city || '')
-    .trim()
-    .toLowerCase();
+  const candidateCity = String(candidate.preferred_city || candidate.city || '').trim();
 
   const wantsFellowship = Boolean(
     candidate.interested_in_fellowships ??
       candidate.fellowship_interest ??
       candidate.wants_fellowship ??
-      (String(candidate.role_preference || candidate.preferred_role_type || '')
-        .toLowerCase()
-        .includes('fellowship'))
+      true
   );
-  const preferredSector = String(
-    candidate.preferred_sector || candidate.sector_preference || 'ALL'
-  ).toUpperCase();
 
   const listingCadre = String(listing.cadre || 'DOCTOR').toUpperCase();
   const acceptedDegrees = Array.isArray(listing.degrees_accepted)
@@ -182,15 +191,15 @@ function scoreListingForCandidate(candidate = {}, listing = {}) {
     String(listing.institution_type || '').startsWith('PRIVATE') ||
     String(listing.application_mode || '').toLowerCase().includes('direct');
 
-  let sCadreDegree = 0;
-  let degreeEligible = false;
-
   if (candidateCadre !== listingCadre) {
     return {
-      score: 12,
+      score: 10,
       matchTier: 'EXPLORE',
       reasons: [`Different Healthcare Cadre (${listingCadre})`],
       eligible: false,
+      degreeEligible: false,
+      specialtyEligible: false,
+      locationMatch: false,
       breakdown: {
         cadre_degree: 0,
         specialty: 0,
@@ -201,6 +210,11 @@ function scoreListingForCandidate(candidate = {}, listing = {}) {
     };
   }
 
+  // 1. Strict Degree Check:
+  // Do NOT treat MS (Surgical) as eligible for an MD-only (Medical) role unless the listing accepts MS or DNB!
+  let sCadreDegree = 0;
+  let degreeEligible = false;
+
   const cadreMap = DEGREE_LEVELS[candidateCadre] || DEGREE_LEVELS.DOCTOR;
   const candLevel = cadreMap[candidateDegree] || 1;
   const acceptedLevels = acceptedDegrees
@@ -209,41 +223,43 @@ function scoreListingForCandidate(candidate = {}, listing = {}) {
   const minRequiredLevel = acceptedLevels.length
     ? Math.min(...acceptedLevels)
     : 1;
-  const maxAcceptedLevel = acceptedLevels.length
-    ? Math.max(...acceptedLevels)
-    : 3;
 
   const exactDegreeMatch = acceptedDegrees.includes(candidateDegree);
-  const pgEquivalentMatch =
+  const dnbEquivalentMatch =
     candidateCadre === 'DOCTOR' &&
-    ['MD', 'MS', 'DNB'].includes(candidateDegree) &&
+    candidateDegree === 'DNB' &&
     acceptedDegrees.some((d) => ['MD', 'MS', 'DNB'].includes(d));
+  const superSpecMatch =
+    candidateCadre === 'DOCTOR' &&
+    ((candidateDegree === 'MCH' && acceptedDegrees.includes('MS')) ||
+      (candidateDegree === 'DM' && acceptedDegrees.includes('MD')));
   const nursingBscEquivalent =
     candidateCadre === 'NURSING' &&
-    ['B.SC NURSING', 'POST-BASIC B.SC'].includes(candidateDegree) &&
-    acceptedDegrees.some((d) => ['B.SC NURSING', 'POST-BASIC B.SC'].includes(d));
+    ['B.SC NURSING', 'POST-BASIC B.SC', 'M.SC NURSING'].includes(candidateDegree) &&
+    acceptedDegrees.some((d) => ['B.SC NURSING', 'POST-BASIC B.SC', 'GNM'].includes(d));
+  const dentalMdsForBds =
+    candidateCadre === 'DENTAL' &&
+    candidateDegree === 'MDS' &&
+    acceptedDegrees.includes('BDS');
 
   if (exactDegreeMatch) {
     sCadreDegree = 100;
     degreeEligible = true;
-    reasons.push(`Qualification Match (${candidateDegreeRaw})`);
-  } else if (pgEquivalentMatch || nursingBscEquivalent) {
-    sCadreDegree = 95;
+    reasons.push(`Degree Eligible (${candidateDegreeRaw})`);
+  } else if (dnbEquivalentMatch || superSpecMatch || nursingBscEquivalent || dentalMdsForBds) {
+    sCadreDegree = 94;
     degreeEligible = true;
-    reasons.push(`Equivalent Qualification Eligible (${candidateDegreeRaw})`);
-  } else if (candLevel > maxAcceptedLevel) {
-    sCadreDegree = 82;
+    reasons.push(`Qualification Eligible (${candidateDegreeRaw})`);
+  } else if (acceptedDegrees.includes('MBBS') && candLevel >= 1 && candidateCadre === 'DOCTOR') {
+    sCadreDegree = 84;
     degreeEligible = true;
-    reasons.push(`Higher Qualification Eligible (${candidateDegreeRaw})`);
-  } else if (candLevel >= minRequiredLevel) {
-    sCadreDegree = 85;
-    degreeEligible = true;
-    reasons.push(`Cadre & Degree Level Eligible (${candidateDegreeRaw})`);
+    reasons.push(`Eligible (${candidateDegreeRaw})`);
   } else {
-    sCadreDegree = 20;
+    sCadreDegree = 15;
     degreeEligible = false;
   }
 
+  // 2. Specialty / Branch Check:
   const specEval = evaluateSpecialtyFit(
     candidateSpecialty,
     listing.specialty,
@@ -251,115 +267,97 @@ function scoreListingForCandidate(candidate = {}, listing = {}) {
     listing.role_category
   );
   const sSpecialty = specEval.score;
+  const specialtyEligible = specEval.isSpecialtyMatch;
   if (specEval.badge) {
     reasons.push(specEval.badge);
   }
 
+  // 3. Experience & Age Check:
   let sExperience = 0;
   let expEligible = true;
 
   if (candidateExp >= minExp) {
-    const expGap = candidateExp - minExp;
-    if (expGap <= 4) {
-      sExperience = 100;
-      reasons.push(
-        minExp === 0
-          ? `Fresher / Early-Career Friendly (${candidateExp} yr exp)`
-          : `Experience Fit (${candidateExp}+ yrs vs ${minExp} yr req)`
-      );
-    } else if (expGap <= 8) {
-      sExperience = 88;
-      reasons.push(`Strong Experience Profile (${candidateExp} yrs)`);
-    } else {
-      sExperience = isFellowship ? 70 : 76;
-    }
+    sExperience = 100;
+    reasons.push(
+      minExp === 0
+        ? `Fresher / 0+ Yrs Eligible`
+        : `Experience Fit (${candidateExp} yrs vs ${minExp}+ req)`
+    );
   } else {
     const deficit = minExp - candidateExp;
     if (deficit === 1) {
-      sExperience = 55;
-      expEligible = false;
-      reasons.push(`Stretch Role (Requires ${minExp} yrs exp)`);
+      sExperience = 65;
+      expEligible = true; // allow 1-year stretch roles if degree & branch match
+      reasons.push(`Requires ${minExp}+ yrs exp`);
     } else {
-      sExperience = 20;
+      sExperience = 25;
       expEligible = false;
     }
   }
 
   const ageEligible = candidateAge <= maxAge;
-  if (!ageEligible) {
-    sExperience = Math.max(10, sExperience - 40);
-  }
 
+  // 4. Location (City & State) Check:
   let sLocation = 60;
+  let locationMatch = true;
   const listingState = String(listing.state || '').trim();
   const listingCity = String(listing.city || '').trim();
 
-  if (
+  const hasCityPref =
     candidateCity &&
-    listingCity.toLowerCase().includes(candidateCity)
-  ) {
-    sLocation = 100;
-    reasons.push(`Preferred City (${listingCity})`);
-  } else if (
-    candidateStatesList.length > 0 &&
-    (candidateStatesList.includes(listingState.toLowerCase()) ||
-      candidateStatesList.includes('all india') ||
-      candidateStatesList.includes('any'))
-  ) {
-    sLocation = 100;
-    reasons.push(`Preferred State (${listingState})`);
-  } else if (
-    String(listing.institution_type || '').includes('CENTRAL') ||
-    String(listing.application_mode || '').includes('Direct Apply')
-  ) {
-    sLocation = 72;
-  }
+    candidateCity.toLowerCase() !== 'all' &&
+    candidateCity.toLowerCase() !== 'any';
+  const hasStatePref =
+    candidateState &&
+    candidateState.toLowerCase() !== 'all india' &&
+    candidateState.toLowerCase() !== 'all' &&
+    candidateState.toLowerCase() !== 'any';
 
-  let sTrack = 75;
-
-  if (isFellowship) {
-    if (wantsFellowship) {
-      sTrack = 100;
-      reasons.push('Matches Fellowship & Skill-Enhancement Track');
-    } else if (candidateExp <= 3) {
-      sTrack = 92;
-      reasons.push('Recommended Early-Career Fellowship Track');
-    } else {
-      sTrack = 65;
-    }
-  } else {
-    if (preferredSector === 'PRIVATE' && isPrivate) {
-      sTrack = 100;
-      reasons.push('1-Click Direct Apply (Private Hospital Track)');
-    } else if (
-      (preferredSector === 'GOVT' || preferredSector === 'GOVERNMENT') &&
-      !isPrivate
+  if (hasCityPref) {
+    if (
+      listingCity.toLowerCase().includes(candidateCity.toLowerCase()) ||
+      listingState.toLowerCase().includes(candidateCity.toLowerCase())
     ) {
-      sTrack = 100;
-      reasons.push('Matches Govt / State DME Career Track');
-    } else if (isPrivate) {
-      sTrack = 88;
-      reasons.push('1-Click Direct Apply');
+      sLocation = 100;
+      locationMatch = true;
+      reasons.push(`City Match: ${listingCity || listingState}`);
     } else {
-      sTrack = 88;
-      reasons.push('Verified Govt / DME Notification');
+      sLocation = 35;
+      locationMatch = false;
+    }
+  } else if (hasStatePref) {
+    if (
+      listingState.toLowerCase() === candidateState.toLowerCase() ||
+      listingState.toLowerCase() === 'all india'
+    ) {
+      sLocation = 100;
+      locationMatch = true;
+      reasons.push(`State Match: ${listingState}`);
+    } else {
+      sLocation = 45;
+      locationMatch = false;
     }
   }
+
+  // 5. Track Check:
+  let sTrack = isPrivate ? 92 : 92;
+  if (isFellowship && wantsFellowship) {
+    sTrack = 100;
+    reasons.push('Fellowship Track');
+  }
+
+  // Eligible requires Degree + Specialty/Branch + Experience!
+  const eligible = Boolean(degreeEligible && specialtyEligible && expEligible && ageEligible);
 
   let rawScore =
     0.35 * sCadreDegree +
-    0.25 * sSpecialty +
-    0.20 * sExperience +
+    0.35 * sSpecialty +
+    0.15 * sExperience +
     0.10 * sLocation +
-    0.10 * sTrack;
+    0.05 * sTrack;
 
-  if (isFellowship && wantsFellowship && degreeEligible) {
-    rawScore = Math.min(100, rawScore + 5);
-  }
-
-  const eligible = Boolean(degreeEligible && expEligible && ageEligible);
   if (!eligible) {
-    rawScore = Math.min(rawScore, 64);
+    rawScore = Math.min(rawScore, 55);
   }
 
   const score = Math.round(Math.max(0, Math.min(100, rawScore)));
@@ -367,9 +365,9 @@ function scoreListingForCandidate(candidate = {}, listing = {}) {
   let matchTier = 'EXPLORE';
   if (eligible && score >= 85) {
     matchTier = 'TOP_MATCH';
-  } else if (eligible && score >= 72) {
+  } else if (eligible && score >= 70) {
     matchTier = 'STRONG_MATCH';
-  } else if (eligible && score >= 55) {
+  } else if (eligible) {
     matchTier = 'ELIGIBLE';
   }
 
@@ -378,6 +376,9 @@ function scoreListingForCandidate(candidate = {}, listing = {}) {
     matchTier,
     reasons: reasons.slice(0, 5),
     eligible,
+    degreeEligible,
+    specialtyEligible,
+    locationMatch,
     breakdown: {
       cadre_degree: Math.round(sCadreDegree),
       specialty: Math.round(sSpecialty),
@@ -395,7 +396,7 @@ function getRecommendationsForCandidate(candidate = {}, allListings = [], option
     excludeFellowships = false,
     sector = null,
     cadreFilter = true,
-    limit = 50,
+    limit = 100,
   } = options;
 
   const candidateDegree = normalizeDegree(
@@ -438,12 +439,17 @@ function getRecommendationsForCandidate(candidate = {}, allListings = [], option
       matchTier: evaluation.matchTier,
       matchReasons: evaluation.reasons,
       eligible: evaluation.eligible,
+      degreeEligible: evaluation.degreeEligible,
+      specialtyEligible: evaluation.specialtyEligible,
+      locationMatch: evaluation.locationMatch,
       matchBreakdown: evaluation.breakdown,
+      _match: evaluation,
     });
   }
 
   scored.sort((a, b) => {
     if (b.eligible !== a.eligible) return b.eligible ? 1 : -1;
+    if (b.locationMatch !== a.locationMatch) return b.locationMatch ? 1 : -1;
     if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
     return (b.monthly_pay_inr || 0) - (a.monthly_pay_inr || 0);
   });

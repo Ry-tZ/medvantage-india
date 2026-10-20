@@ -1,5 +1,5 @@
 {
-  "ran_at": "2026-10-20T07:38:22.379Z",
+  "ran_at": "2026-10-20T08:00:47.670Z",
   "total": 12,
   "passed": 12,
   "failed": 0,
@@ -50,22 +50,22 @@
     {
       "name": "API E2E: POST /api/apply (1-Click Direct Apply Dossier Creation)",
       "ok": true,
-      "detail": "Created Dossier APP-2026-7714 with 1 timeline events"
+      "detail": "Created Dossier APP-2026-5057 with 1 timeline events"
     },
     {
       "name": "API E2E: POST /api/applications/status (4-Stage Pipeline Transition)",
       "ok": true,
-      "detail": "Advanced APP-2026-7714 to \"Interview Scheduled\""
+      "detail": "Advanced APP-2026-5057 to \"Interview Scheduled\""
     },
     {
       "name": "API E2E: POST /api/applications/note (Interactive Dossier Note)",
       "ok": true,
-      "detail": "Added clinical note to APP-2026-7714 (1 notes total)"
+      "detail": "Added clinical note to APP-2026-5057 (1 notes total)"
     },
     {
       "name": "API E2E: POST /api/applications/withdraw (Clean Dossier Teardown)",
       "ok": true,
-      "detail": "Withdrew temporary test application APP-2026-7714 cleanly"
+      "detail": "Withdrew temporary test application APP-2026-5057 cleanly"
     }
   ],
   "link_details": [
@@ -73,127 +73,127 @@
       "url": "https://www.aiimsexams.ac.in",
       "ok": true,
       "status": 200,
-      "latency_ms": 135
+      "latency_ms": 242
     },
     {
       "url": "https://pgimer.edu.in",
       "ok": true,
       "status": 200,
-      "latency_ms": 143
+      "latency_ms": 167
     },
     {
       "url": "https://www.esic.gov.in/recruitments",
       "ok": true,
       "status": 301,
-      "latency_ms": 130
+      "latency_ms": 152
     },
     {
       "url": "https://cetcell.mahacet.org",
       "ok": true,
       "status": 200,
-      "latency_ms": 343
+      "latency_ms": 590
     },
     {
       "url": "https://dme.karnataka.gov.in",
       "ok": true,
       "status": 200,
-      "latency_ms": 228
+      "latency_ms": 288
     },
     {
       "url": "https://dgme.up.gov.in",
       "ok": true,
       "status": 200,
-      "latency_ms": 448
+      "latency_ms": 659
     },
     {
       "url": "https://www.ruhsraj.org",
       "ok": true,
       "status": 301,
-      "latency_ms": 295
+      "latency_ms": 367
     },
     {
       "url": "https://dsssb.delhi.gov.in",
       "ok": true,
       "status": 200,
-      "latency_ms": 976
+      "latency_ms": 1010
     },
     {
       "url": "https://www.mrb.tn.gov.in",
       "ok": true,
       "status": 200,
-      "latency_ms": 435
+      "latency_ms": 521
     },
     {
       "url": "https://jipmer.edu.in",
       "ok": true,
       "status": 200,
-      "latency_ms": 3928
+      "latency_ms": 4231
     },
     {
       "url": "https://nimhans.ac.in",
       "ok": true,
       "status": 301,
-      "latency_ms": 248
+      "latency_ms": 2702
     },
     {
       "url": "https://www.apollohospitals.com/corporate/careers/",
       "ok": true,
       "status": 200,
-      "latency_ms": 309
+      "latency_ms": 393
     },
     {
       "url": "https://www.manipalhospitals.com/",
       "ok": true,
       "status": 200,
-      "latency_ms": 609
+      "latency_ms": 694
     },
     {
       "url": "https://www.carehospitals.com/careers",
       "ok": true,
       "status": 200,
-      "latency_ms": 326
+      "latency_ms": 417
     },
     {
       "url": "https://www.fortishealthcare.com/",
       "ok": true,
       "status": 403,
-      "latency_ms": 308
+      "latency_ms": 397
     },
     {
       "url": "https://clovedental.in/",
       "ok": true,
       "status": 200,
-      "latency_ms": 878
+      "latency_ms": 1156
     },
     {
       "url": "https://www.maxhealthcare.in/",
       "ok": true,
       "status": 403,
-      "latency_ms": 291
+      "latency_ms": 489
     },
     {
       "url": "https://www.medanta.org/",
       "ok": true,
       "status": 200,
-      "latency_ms": 757
+      "latency_ms": 859
     },
     {
       "url": "https://www.narayanahealth.org/",
       "ok": true,
       "status": 200,
-      "latency_ms": 2830
+      "latency_ms": 2847
     },
     {
       "url": "https://www.kimshospitals.com/careers/",
       "ok": true,
       "status": 200,
-      "latency_ms": 589
+      "latency_ms": 795
     },
     {
       "url": "https://zydushospitals.com/",
       "ok": true,
       "status": 200,
-      "latency_ms": 699
+      "latency_ms": 689
     }
   ]
 }
