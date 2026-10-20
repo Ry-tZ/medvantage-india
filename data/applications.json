@@ -1,0 +1,90 @@
+[
+  {
+    "id": "APP-2026-8693",
+    "job_id": "PVT-DOC-001",
+    "job_title": "Junior Resident / RMO & Registrar (Emergency, ICU & Inpatient Wards)",
+    "institution": "Apollo Hospitals (Greams Road Chennai) & Kauvery Hospital (Chennai / Coimbatore / Trichy)",
+    "institution_type": "PRIVATE_HOSPITAL",
+    "cadre": "DOCTOR",
+    "is_fellowship": false,
+    "candidate_id": "cand-doc-md",
+    "candidate_name": "Dr. Aarav Sharma",
+    "candidate_degree": "MD",
+    "candidate_specialty": "General Medicine",
+    "candidate_experience_years": 1,
+    "match_score": 96,
+    "notice_period": "Immediate (Within 7 Days)",
+    "cover_note": "Applying with my MD (General Medicine) profile and 1 yr(s) clinical experience.",
+    "status": "Applied",
+    "applied_at": "2026-10-18T21:16:04.988Z",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "pay_scale": "₹75,000 - ₹1,40,000 / month",
+    "candidate_alma_mater": "MAMC New Delhi",
+    "candidate_email": "aarav.sharma@medvantage.in",
+    "candidate_phone": "+91 98112 45091",
+    "candidate_skills": [
+      "ICU Management",
+      "Mechanical Ventilation",
+      "Point-of-Care Ultrasound",
+      "OPD/IPD Care"
+    ],
+    "eligibility_summary": "Eligible · MD · General Medicine",
+    "timeline": [
+      {
+        "stage": "Applied",
+        "timestamp": "2026-10-18T21:16:04.988Z",
+        "actor": "Dr. Aarav Sharma",
+        "detail": "Submitted structured clinical profile via MedVantage 1-Click Apply."
+      }
+    ],
+    "notes": []
+  },
+  {
+    "id": "APP-2026-1002",
+    "job_id": "PVT-FEL-020",
+    "job_title": "Advanced Clinical Fellowship in Oral Implantology, Full-Mouth Rehab & Aesthetic Dentistry",
+    "institution": "Clove Dental Academy & Smile India Institute",
+    "institution_type": "PRIVATE_HOSPITAL",
+    "cadre": "DENTAL",
+    "is_fellowship": true,
+    "candidate_id": "cand-dental-mds",
+    "candidate_name": "Dr. Priya Nair",
+    "candidate_degree": "MDS",
+    "candidate_specialty": "Oral & Maxillofacial Surgery",
+    "candidate_experience_years": 2,
+    "match_score": 94,
+    "notice_period": "Immediate",
+    "cover_note": "Keen to expand guided CBCT implantology & full-mouth rehabilitation logbook.",
+    "status": "Profile Shortlisted",
+    "applied_at": "2026-10-18T16:45:00Z",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "pay_scale": "₹45,000 / month Stipend + Case Incentives",
+    "candidate_alma_mater": "Govt Dental College Bengaluru",
+    "candidate_email": "priya.nair@medvantage.in",
+    "candidate_phone": "+91 98450 77821",
+    "candidate_skills": [
+      "Surgical Extractions",
+      "Dental Implantology",
+      "Maxillofacial Trauma",
+      "Rotary Endodontics"
+    ],
+    "eligibility_summary": "Eligible · MDS · Oral & Maxillofacial Surgery",
+    "timeline": [
+      {
+        "stage": "Applied",
+        "timestamp": "2026-10-18T16:45:00Z",
+        "actor": "Dr. Priya Nair",
+        "detail": "Submitted structured clinical profile via MedVantage 1-Click Apply."
+      },
+      {
+        "stage": "Profile Shortlisted",
+        "timestamp": "2026-10-18T22:35:09.237Z",
+        "actor": "Clove Dental Academy & Smile India Institute",
+        "detail": "Application advanced to Profile Shortlisted."
+      }
+    ],
+    "notes": []
+  }
+]

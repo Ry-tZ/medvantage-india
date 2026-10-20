@@ -1,0 +1,14 @@
+{
+  "name": "medvantage-india",
+  "version": "1.0.0",
+  "description": "MedVantage India — Unified Clinical Career, Fellowship & Live Govt/State DME + Private Hospital Chain Portal",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node backend/qa_verifier.js",
+    "scrape": "python backend/gov_dme_scraper.py && python backend/private_hospital_scraper.py"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

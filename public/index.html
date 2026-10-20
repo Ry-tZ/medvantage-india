@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MedVantage" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>MedVantage India — Healthcare Careers, Fellowships &amp; Live Govt/DME Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <!-- MOBILE PHONE APP HEADER (Visible on <= 860px screens — Zero Predefined Profiles on Start) -->
+  <div class="mobile-topbar" id="mobileTopbar">
+    <a href="#/feed" class="mobile-brand">
+      <span class="brand-mark">M</span>
+      <span class="brand-name">MedVantage</span>
+    </a>
+    <div class="mobile-top-actions">
+      <button id="mobileEditProfileBtn" class="btn-mobile-profile-pill" type="button">
+        <span id="mobileProfilePillText">+ Set Up Profile</span>
+      </button>
+      <button id="mobilePostJobBtn" class="btn-mobile-chip" type="button">+ Post</button>
+      <button id="mobileShareBtn" class="btn-mobile-chip btn-mobile-share" type="button">Share</button>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <!-- Left Navigation Sidebar (Desktop Workday / Linear Minimalist Shell) -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <a href="#/feed" class="brand" style="text-decoration:none;">
+          <div class="brand-mark">M</div>
+          <div>
+            <div class="brand-name">MedVantage</div>
+            <div class="brand-tag">India Clinical Careers</div>
+          </div>
+        </a>
+
+        <!-- User-Owned Clinical Profile Card (Starts Empty — No Predefined Persona) -->
+        <div class="profile-card-mini" id="sidebarProfileCard">
+          <div class="profile-mini-top">
+            <div class="avatar-sm" id="profileAvatar">+</div>
+            <div class="profile-mini-info">
+              <div class="profile-mini-name" id="profileName">No Profile Set Yet</div>
+              <div class="profile-mini-sub" id="profileDegreeBadge">Add your degree &amp; specialty</div>
+            </div>
+          </div>
+          <div class="profile-mini-controls" style="flex-direction:row;align-items:center;justify-content:space-between;">
+            <button id="editProfileBtn" class="btn btn-primary btn-full" style="padding:6px 10px;font-size:12px;" title="Create or update your clinical profile">
+              + Create My Profile
+            </button>
+            <button id="clearProfileBtn" class="btn-ghost-sm hidden" style="font-size:11.5px;padding:4px 6px;" title="Reset profile">
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Primary Navigation -->
+        <nav class="side-nav" aria-label="Primary Workspace Navigation">
+          <div class="nav-section-label">Clinical Feeds</div>
+          <button class="nav-item active" data-tab="recommendations">
+            <span class="nav-item-label">Eligible For You</span>
+            <span class="nav-count" id="tabCountRecs">0</span>
+          </button>
+          <button class="nav-item" data-tab="gov-radar">
+            <span class="nav-item-label">Govt &amp; State DMEs</span>
+            <span class="nav-count" id="tabCountGov">0</span>
+          </button>
+          <button class="nav-item" data-tab="private-hospitals">
+            <span class="nav-item-label">Big Private Chains</span>
+            <span class="nav-count" id="tabCountPrivate">0</span>
+          </button>
+          <button class="nav-item" data-tab="fellowships">
+            <span class="nav-item-label">Fellowships Hub</span>
+            <span class="nav-count" id="tabCountFellowships">0</span>
+          </button>
+
+          <div class="nav-section-label" style="margin-top: 16px;">Dossiers &amp; QA</div>
+          <button class="nav-item" data-tab="applications">
+            <span class="nav-item-label">Applications &amp; HR ATS</span>
+            <span class="nav-count" id="tabCountApps">0</span>
+          </button>
+          <button class="nav-item" data-tab="qa-audit">
+            <span class="nav-item-label">QA &amp; Link Verifier</span>
+            <span class="nav-count nav-count-ok" id="tabCountQa">PASS</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Subtle Scraper Status & Employer Action Footer -->
+      <div class="sidebar-footer">
+        <div class="scraper-status-box">
+          <div class="status-dot-line">
+            <span class="dot-live"></span>
+            <span id="sidebarScraperText">23/24 Portals Verified</span>
+          </div>
+          <div class="scraper-mini-btns">
+            <button id="runScraperBtn" class="btn-link-xs">Sync Govt DMEs</button>
+            <span>·</span>
+            <button id="runPrivateScraperBtn" class="btn-link-xs">Sync Pvt Chains</button>
+          </div>
+        </div>
+        <button id="openPostJobModalBtn" class="btn btn-outline btn-full">+ Post Hospital Opening</button>
+        <button id="desktopSharePortalBtn" class="btn btn-primary btn-full">Share Live Web / Mobile Link</button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Canvas -->
+    <div class="main-area">
+      <!-- Single Clean Sticky Top Filter Bar (hidden automatically on dedicated #/job/:id and #/application/:id full pages) -->
+      <header class="workspace-header" id="workspaceHeader">
+        <div class="header-title-row">
+          <div>
+            <h1 id="viewTitle" class="view-title">Eligible Roles For Your Qualification</h1>
+            <p id="viewSubtitle" class="view-subtitle">Create or update your clinical profile anytime to filter Govt/State DME &amp; Private Hospital openings.</p>
+          </div>
+          <div id="recQuickBar" class="segmented-control">
+            <button class="seg-btn active" data-rec-filter="ALL">All</button>
+            <button class="seg-btn" data-rec-filter="PRIVATE">Private Chains</button>
+            <button class="seg-btn" data-rec-filter="GOVT">Govt &amp; DMEs</button>
+            <button class="seg-btn" data-rec-filter="FELLOWSHIP">Fellowships</button>
+          </div>
+        </div>
+
+        <!-- Minimalist Faceted Filter Bar (With Mobile Collapsible Toggle) -->
+        <div class="faceted-bar" id="globalFilterBar">
+          <div class="search-row-mobile">
+            <div class="search-input-wrap">
+              <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="filterSearch" aria-label="Search clinical openings" placeholder="Search specialty, hospital chain, AIIMS/DME, or city..." />
+            </div>
+            <button type="button" id="mobileFilterToggleBtn" class="btn btn-outline mobile-only-filter-btn">
+              Filters
+            </button>
+          </div>
+
+          <div class="facet-selects-group" id="facetSelectsGroup">
+            <select id="filterCadre" class="facet-select" aria-label="Filter by Cadre">
+              <option value="MATCH_PROFILE">Cadre: Match My Profile</option>
+              <option value="ALL">All Cadres (Doc / Dental / Nurse)</option>
+              <option value="DOCTOR">Allopathic Doctors (MBBS/MD/MS/DM)</option>
+              <option value="DENTAL">Dental (BDS / MDS)</option>
+              <option value="NURSING">Nursing (B.Sc / M.Sc / GNM)</option>
+            </select>
+
+            <select id="filterState" class="facet-select" aria-label="Filter by State">
+              <option value="ALL">State: All India</option>
+              <option value="Maharashtra">Maharashtra</option>
+              <option value="Delhi">Delhi NCR</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Tamil Nadu">Tamil Nadu</option>
+              <option value="Telangana">Telangana</option>
+              <option value="Gujarat">Gujarat</option>
+              <option value="Uttar Pradesh">Uttar Pradesh</option>
+              <option value="West Bengal">West Bengal</option>
+              <option value="Rajasthan">Rajasthan</option>
+              <option value="Haryana">Haryana</option>
+              <option value="Chandigarh">Chandigarh</option>
+              <option value="Puducherry">Puducherry</option>
+              <option value="Odisha">Odisha</option>
+            </select>
+
+            <select id="filterCityPop" class="facet-select" aria-label="Filter by City Population Hub">
+              <option value="ALL">City: All Hubs</option>
+              <option value="POP_40L_PLUS">★ &gt;40–50L+ Population Metro Hubs</option>
+              <option value="Mumbai">Mumbai (212L+)</option>
+              <option value="New Delhi">New Delhi (320L+ NCR)</option>
+              <option value="Bengaluru">Bengaluru (140L+)</option>
+              <option value="Kolkata">Kolkata (153L+)</option>
+              <option value="Chennai">Chennai (118L+)</option>
+              <option value="Hyderabad">Hyderabad (110L+)</option>
+              <option value="Ahmedabad">Ahmedabad (88L+)</option>
+              <option value="Surat">Surat (78L+)</option>
+              <option value="Pune">Pune (74L+)</option>
+              <option value="Lucknow">Lucknow (46L+)</option>
+              <option value="Jaipur">Jaipur (45L+)</option>
+              <option value="Gurugram">Gurugram (45L+)</option>
+              <option value="Nagpur">Nagpur (42L+)</option>
+              <option value="Kanpur">Kanpur (42L+)</option>
+              <option value="Indore">Indore (42L+)</option>
+              <option value="Visakhapatnam">Visakhapatnam (42L+)</option>
+              <option value="Coimbatore">Coimbatore (41L+)</option>
+              <option value="Vadodara">Vadodara (41L+)</option>
+              <option value="Kochi">Kochi (41L+)</option>
+            </select>
+
+            <button id="resetFiltersBtn" class="btn-ghost-sm">Reset</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Views -->
+      <main class="workspace-body">
+        <!-- View 1: Eligible Roles Feed (With Inline Profile Setup / Active Profile Summary Banner) -->
+        <section id="tab-recommendations" class="view-panel active">
+          <div id="onboardingProfileBanner"></div>
+          <div id="recommendationsGrid" class="job-list"></div>
+        </section>
+
+        <!-- View 2: Govt & State DME Radar -->
+        <section id="tab-gov-radar" class="view-panel">
+          <div class="compact-telemetry-bar" id="govTelemetryBar"></div>
+          <div id="govListingsGrid" class="job-list"></div>
+        </section>
+
+        <!-- View 3: Big Private Hospital Chains -->
+        <section id="tab-private-hospitals" class="view-panel">
+          <div class="compact-telemetry-bar" id="privateTelemetryBar"></div>
+          <div id="privateListingsGrid" class="job-list"></div>
+        </section>
+
+        <!-- View 4: Fellowships Hub -->
+        <section id="tab-fellowships" class="view-panel">
+          <div id="fellowshipsGrid" class="job-list"></div>
+        </section>
+
+        <!-- View 5: Applications & Employer ATS (Every tile is clickable -> opens #/application/:id) -->
+        <section id="tab-applications" class="view-panel">
+          <div class="ats-split">
+            <div>
+              <div class="sub-header">
+                <h3>My Submitted Applications</h3>
+                <p>Click any application tile below to open its full Application Dossier page, timeline, and notes.</p>
+              </div>
+              <div id="myApplicationsList" class="job-list"></div>
+            </div>
+            <div>
+              <div class="sub-header">
+                <h3>Hospital HR Applicant Pipeline (ATS)</h3>
+                <p>Click any candidate tile to inspect their full clinical dossier or advance hiring stages.</p>
+              </div>
+              <div id="employerAtsList" class="job-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- View 6: Live QA & Link Verification Dashboard (#/qa-audit) -->
+        <section id="tab-qa-audit" class="view-panel">
+          <div id="qaAuditContainer" class="full-page-container"></div>
+        </section>
+
+        <!-- FULL-PAGE ROUTE 1: Dedicated Job & Multi-Step Application Page (#/job/:id) -->
+        <section id="page-job-detail" class="view-panel">
+          <div id="fullJobPageContainer" class="full-page-container"></div>
+        </section>
+
+        <!-- FULL-PAGE ROUTE 2: Dedicated Application Dossier Page (#/application/:id) -->
+        <section id="page-application-dossier" class="view-panel">
+          <div id="fullApplicationDossierContainer" class="full-page-container"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- MOBILE WEB STICKY BOTTOM TAB BAR (Visible on <= 860px screens) -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile Bottom Navigation">
+    <button class="mobile-nav-item active" data-tab="recommendations" type="button">
+      <span class="mobile-nav-badge" id="mobCountRecs">0</span>
+      <span class="mobile-nav-label">Eligible</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="gov-radar" type="button">
+      <span class="mobile-nav-badge" id="mobCountGov">0</span>
+      <span class="mobile-nav-label">Govt/DME</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="private-hospitals" type="button">
+      <span class="mobile-nav-badge" id="mobCountPrivate">0</span>
+      <span class="mobile-nav-label">Pvt Chains</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="fellowships" type="button">
+      <span class="mobile-nav-badge" id="mobCountFellowships">0</span>
+      <span class="mobile-nav-label">Fellowships</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="applications" type="button">
+      <span class="mobile-nav-badge" id="mobCountApps">0</span>
+      <span class="mobile-nav-label">Dossiers</span>
+    </button>
+  </nav>
+
+  <!-- PROGRESSIVE DISCLOSURE: Right-Hand Slide-Over Job Detail & 1-Click Apply Drawer -->
+  <div id="detailDrawerBackdrop" class="drawer-backdrop hidden">
+    <aside class="detail-drawer" id="detailDrawer">
+      <div class="drawer-header">
+        <div id="drawerBadges" class="drawer-badges"></div>
+        <button id="closeDrawerBtn" class="btn-close" aria-label="Close">&times;</button>
+      </div>
+      <div id="drawerBody" class="drawer-body"></div>
+    </aside>
+  </div>
+
+  <!-- MODAL: Edit / Create Candidate Profile -->
+  <div id="profileModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Clinician Profile &amp; Preferences</h3>
+        <button class="btn-close" data-close="profileModal">&times;</button>
+      </div>
+      <form id="profileForm" class="modal-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Full Name</label>
+            <input type="text" id="profName" required />
+          </div>
+          <div class="form-field">
+            <label>Healthcare Cadre</label>
+            <select id="profCadre" required>
+              <option value="DOCTOR">Allopathic Doctor (MBBS / MD / MS / DNB / DM / MCh)</option>
+              <option value="DENTAL">Dental Professional (BDS / MDS)</option>
+              <option value="NURSING">Nurse / Nursing Officer (B.Sc / M.Sc / GNM)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Highest Qualification</label>
+            <select id="profDegree" required>
+              <option value="MBBS">MBBS</option>
+              <option value="MD">MD</option>
+              <option value="MS">MS</option>
+              <option value="DNB">DNB</option>
+              <option value="DM">DM</option>
+              <option value="MCh">MCh</option>
+              <option value="BDS">BDS</option>
+              <option value="MDS">MDS</option>
+              <option value="B.Sc Nursing">B.Sc Nursing</option>
+              <option value="Post-Basic B.Sc">Post-Basic B.Sc Nursing</option>
+              <option value="M.Sc Nursing">M.Sc Nursing</option>
+              <option value="GNM">GNM</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Specialty / Department</label>
+            <input type="text" id="profSpecialty" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Experience (Years)</label>
+            <input type="number" id="profExp" min="0" max="40" value="1" required />
+          </div>
+          <div class="form-field">
+            <label>Age (Years)</label>
+            <input type="number" id="profAge" min="20" max="68" value="28" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Preferred State</label>
+            <select id="profState">
+              <option value="Delhi">Delhi</option>
+              <option value="Maharashtra">Maharashtra</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Tamil Nadu">Tamil Nadu</option>
+              <option value="Telangana">Telangana</option>
+              <option value="Gujarat">Gujarat</option>
+              <option value="Uttar Pradesh">Uttar Pradesh</option>
+              <option value="West Bengal">West Bengal</option>
+              <option value="Haryana">Haryana</option>
+              <option value="Rajasthan">Rajasthan</option>
+              <option value="Chandigarh">Chandigarh</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Alma Mater / Current Hospital</label>
+            <input type="text" id="profAlmaMater" />
+          </div>
+        </div>
+
+        <div class="form-field checkbox-field">
+          <label>
+            <input type="checkbox" id="profFellowship" checked />
+            <span>Include Fellowships &amp; Super-Specialty Training in recommendations</span>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close="profileModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Post New Hospital / College Opening -->
+  <div id="postJobModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Post Hospital or College Opening</h3>
+        <button class="btn-close" data-close="postJobModal">&times;</button>
+      </div>
+      <form id="postJobForm" class="modal-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Hospital / College Name</label>
+            <input type="text" id="postInstitution" required placeholder="e.g. Apollo Hospitals / Manipal / Clove Dental" />
+          </div>
+          <div class="form-field">
+            <label>Target Cadre</label>
+            <select id="postCadre" required>
+              <option value="DOCTOR">Allopathic Doctor</option>
+              <option value="DENTAL">Dental Professional</option>
+              <option value="NURSING">Nursing</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Role / Fellowship Title</label>
+            <input type="text" id="postTitle" required placeholder="e.g. Consultant Pediatrics / Clinical Fellow" />
+          </div>
+          <div class="form-field">
+            <label>Opening Type</label>
+            <select id="postIsFellowship">
+              <option value="false">Full-Time Role</option>
+              <option value="true">Clinical Fellowship</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Specialty</label>
+            <input type="text" id="postSpecialty" required placeholder="e.g. Critical Care, Oral Surgery, ICU" />
+          </div>
+          <div class="form-field">
+            <label>Accepted Degrees (comma-separated)</label>
+            <input type="text" id="postDegrees" required value="MD, DNB, MBBS" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Min Experience (Years)</label>
+            <input type="number" id="postMinExp" min="0" max="25" value="1" required />
+          </div>
+          <div class="form-field">
+            <label>Monthly Pay / Stipend (INR)</label>
+            <input type="number" id="postMonthlyPay" min="20000" step="5000" value="150000" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>State</label>
+            <select id="postState">
+              <option value="Maharashtra">Maharashtra</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Tamil Nadu">Tamil Nadu</option>
+              <option value="Telangana">Telangana</option>
+              <option value="Gujarat">Gujarat</option>
+              <option value="Uttar Pradesh">Uttar Pradesh</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>City</label>
+            <input type="text" id="postCity" value="Mumbai" required />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Key Highlights (One per line)</label>
+          <textarea id="postHighlights" rows="3">Direct 1-Click Apply with fast-track interview
+Full clinical &amp; academic support</textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close="postJobModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Publish Opening</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

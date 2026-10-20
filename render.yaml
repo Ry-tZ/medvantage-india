@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: medvantage-india-portal
+    runtime: node
+    plan: free
+    buildCommand: echo "Zero external npm dependencies required"
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production

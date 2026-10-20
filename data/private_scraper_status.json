@@ -1,0 +1,380 @@
+{
+  "last_run_at": "2026-10-18T22:08:36.818700+00:00",
+  "chains_probed": 12,
+  "chains_reachable": 12,
+  "jobs_count": 24,
+  "metro_40l_plus_count": 24,
+  "state_major_cities": {
+    "Maharashtra": [
+      {
+        "city": "Mumbai",
+        "population_lakhs": 212,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Pune",
+        "population_lakhs": 74,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Nagpur",
+        "population_lakhs": 42,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Nashik",
+        "population_lakhs": 24,
+        "is_40l_plus": false
+      },
+      {
+        "city": "Chhatrapati Sambhajinagar",
+        "population_lakhs": 19,
+        "is_40l_plus": false
+      }
+    ],
+    "Delhi NCR": [
+      {
+        "city": "New Delhi",
+        "population_lakhs": 320,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Gurugram",
+        "population_lakhs": 45,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Noida",
+        "population_lakhs": 42,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Faridabad",
+        "population_lakhs": 41,
+        "is_40l_plus": true
+      }
+    ],
+    "Karnataka": [
+      {
+        "city": "Bengaluru",
+        "population_lakhs": 140,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Mysuru",
+        "population_lakhs": 15,
+        "is_40l_plus": false
+      },
+      {
+        "city": "Hubballi-Dharwad",
+        "population_lakhs": 14,
+        "is_40l_plus": false
+      },
+      {
+        "city": "Mangaluru",
+        "population_lakhs": 11,
+        "is_40l_plus": false
+      }
+    ],
+    "Tamil Nadu": [
+      {
+        "city": "Chennai",
+        "population_lakhs": 118,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Coimbatore",
+        "population_lakhs": 41,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Madurai",
+        "population_lakhs": 20,
+        "is_40l_plus": false
+      },
+      {
+        "city": "Tiruchirappalli",
+        "population_lakhs": 14,
+        "is_40l_plus": false
+      }
+    ],
+    "Telangana": [
+      {
+        "city": "Hyderabad",
+        "population_lakhs": 110,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Secunderabad",
+        "population_lakhs": 45,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Warangal",
+        "population_lakhs": 12,
+        "is_40l_plus": false
+      }
+    ],
+    "Gujarat": [
+      {
+        "city": "Ahmedabad",
+        "population_lakhs": 88,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Surat",
+        "population_lakhs": 78,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Vadodara",
+        "population_lakhs": 41,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Rajkot",
+        "population_lakhs": 22,
+        "is_40l_plus": false
+      }
+    ],
+    "Uttar Pradesh": [
+      {
+        "city": "Lucknow",
+        "population_lakhs": 46,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Kanpur",
+        "population_lakhs": 42,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Agra",
+        "population_lakhs": 26,
+        "is_40l_plus": false
+      },
+      {
+        "city": "Varanasi",
+        "population_lakhs": 21,
+        "is_40l_plus": false
+      }
+    ],
+    "West Bengal": [
+      {
+        "city": "Kolkata",
+        "population_lakhs": 153,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Howrah",
+        "population_lakhs": 48,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Siliguri",
+        "population_lakhs": 12,
+        "is_40l_plus": false
+      }
+    ],
+    "Rajasthan": [
+      {
+        "city": "Jaipur",
+        "population_lakhs": 45,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Jodhpur",
+        "population_lakhs": 18,
+        "is_40l_plus": false
+      },
+      {
+        "city": "Kota",
+        "population_lakhs": 16,
+        "is_40l_plus": false
+      },
+      {
+        "city": "Udaipur",
+        "population_lakhs": 11,
+        "is_40l_plus": false
+      }
+    ],
+    "Madhya Pradesh": [
+      {
+        "city": "Indore",
+        "population_lakhs": 42,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Bhopal",
+        "population_lakhs": 40,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Jabalpur",
+        "population_lakhs": 17,
+        "is_40l_plus": false
+      }
+    ],
+    "Kerala": [
+      {
+        "city": "Kochi",
+        "population_lakhs": 41,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Thiruvananthapuram",
+        "population_lakhs": 28,
+        "is_40l_plus": false
+      },
+      {
+        "city": "Kozhikode",
+        "population_lakhs": 39,
+        "is_40l_plus": true
+      }
+    ],
+    "Andhra Pradesh": [
+      {
+        "city": "Visakhapatnam",
+        "population_lakhs": 42,
+        "is_40l_plus": true
+      },
+      {
+        "city": "Vijayawada",
+        "population_lakhs": 24,
+        "is_40l_plus": false
+      }
+    ]
+  },
+  "chains": {
+    "MAX_CAREERS": {
+      "chain_key": "MAX_CAREERS",
+      "chain": "Max Healthcare Institute",
+      "url": "https://www.maxhealthcare.in/",
+      "reachable": true,
+      "status": "HTTP_403_REACHABLE",
+      "http_code": 403,
+      "latency_ms": 546,
+      "probed_at": "2026-10-18T22:08:34.099318+00:00"
+    },
+    "APOLLO_CAREERS": {
+      "chain_key": "APOLLO_CAREERS",
+      "chain": "Apollo Hospitals Enterprise Ltd",
+      "url": "https://www.apollohospitals.com/corporate/careers/",
+      "reachable": true,
+      "status": "LIVE_SCRAPED",
+      "http_code": 200,
+      "latency_ms": 576,
+      "probed_at": "2026-10-18T22:08:34.099318+00:00",
+      "sample_hash": "a104a301df4c177d"
+    },
+    "FORTIS_CAREERS": {
+      "chain_key": "FORTIS_CAREERS",
+      "chain": "Fortis Healthcare",
+      "url": "https://www.fortishealthcare.com/",
+      "reachable": true,
+      "status": "HTTP_403_REACHABLE",
+      "http_code": 403,
+      "latency_ms": 625,
+      "probed_at": "2026-10-18T22:08:34.099318+00:00"
+    },
+    "MEDANTA_CAREERS": {
+      "chain_key": "MEDANTA_CAREERS",
+      "chain": "Medanta (Global Health Ltd)",
+      "url": "https://www.medanta.org/",
+      "reachable": true,
+      "status": "LIVE_SCRAPED",
+      "http_code": 200,
+      "latency_ms": 789,
+      "probed_at": "2026-10-18T22:08:34.099318+00:00",
+      "sample_hash": "a0bc915a143683b0"
+    },
+    "ZYDUS_SHALBY": {
+      "chain_key": "ZYDUS_SHALBY",
+      "chain": "Zydus & Shalby Hospitals",
+      "url": "https://zydushospitals.com/",
+      "reachable": true,
+      "status": "LIVE_SCRAPED",
+      "http_code": 200,
+      "latency_ms": 263,
+      "probed_at": "2026-10-18T22:08:34.677287+00:00",
+      "sample_hash": "26183f9d8f4c572f"
+    },
+    "KIMS_CAREERS": {
+      "chain_key": "KIMS_CAREERS",
+      "chain": "KIMS Hospitals",
+      "url": "https://www.kimshospitals.com/careers/",
+      "reachable": true,
+      "status": "LIVE_SCRAPED",
+      "http_code": 200,
+      "latency_ms": 844,
+      "probed_at": "2026-10-18T22:08:34.106875+00:00",
+      "sample_hash": "9c9eeb232bd50d6f"
+    },
+    "ASTER_CAREERS": {
+      "chain_key": "ASTER_CAREERS",
+      "chain": "Aster DM Healthcare India",
+      "url": "https://www.asterhospitals.in/",
+      "reachable": true,
+      "status": "LIVE_SCRAPED",
+      "http_code": 200,
+      "latency_ms": 910,
+      "probed_at": "2026-10-18T22:08:34.106875+00:00",
+      "sample_hash": "596b77a8ef9f5692"
+    },
+    "MANIPAL_CAREERS": {
+      "chain_key": "MANIPAL_CAREERS",
+      "chain": "Manipal Hospitals Group",
+      "url": "https://www.manipalhospitals.com/",
+      "reachable": true,
+      "status": "LIVE_SCRAPED",
+      "http_code": 200,
+      "latency_ms": 961,
+      "probed_at": "2026-10-18T22:08:34.099318+00:00",
+      "sample_hash": "5251749c9cf2f4a3"
+    },
+    "KAUVERY_CAREERS": {
+      "chain_key": "KAUVERY_CAREERS",
+      "chain": "Kauvery Hospitals",
+      "url": "https://www.kauveryhospital.com/careers/",
+      "reachable": true,
+      "status": "LIVE_SCRAPED",
+      "http_code": 200,
+      "latency_ms": 510,
+      "probed_at": "2026-10-18T22:08:34.726710+00:00",
+      "sample_hash": "2404a4d177359edb"
+    },
+    "CLOVE_DENTAL": {
+      "chain_key": "CLOVE_DENTAL",
+      "chain": "Clove Dental & Sabka Dentist Network",
+      "url": "https://clovedental.in/",
+      "reachable": true,
+      "status": "LIVE_SCRAPED",
+      "http_code": 200,
+      "latency_ms": 779,
+      "probed_at": "2026-10-18T22:08:34.890799+00:00",
+      "sample_hash": "becf611d371b7392"
+    },
+    "CARE_CAREERS": {
+      "chain_key": "CARE_CAREERS",
+      "chain": "CARE Hospitals (Quality Care India)",
+      "url": "https://www.carehospitals.com/careers",
+      "reachable": true,
+      "status": "LIVE_SCRAPED",
+      "http_code": 200,
+      "latency_ms": 1246,
+      "probed_at": "2026-10-18T22:08:34.652063+00:00",
+      "sample_hash": "7a9fbba6508b6fe2"
+    },
+    "NARAYANA_CAREERS": {
+      "chain_key": "NARAYANA_CAREERS",
+      "chain": "Narayana Health",
+      "url": "https://www.narayanahealth.org/",
+      "reachable": true,
+      "status": "LIVE_SCRAPED",
+      "http_code": 200,
+      "latency_ms": 2706,
+      "probed_at": "2026-10-18T22:08:34.099318+00:00",
+      "sample_hash": "4551b32267c2e651"
+    }
+  }
+}

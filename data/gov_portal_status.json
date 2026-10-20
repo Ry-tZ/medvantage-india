@@ -1,0 +1,147 @@
+{
+  "last_run_at": "2026-10-18T22:08:33.723945+00:00",
+  "portals_probed": 12,
+  "portals_reachable": 11,
+  "notifications_count": 20,
+  "by_cadre": {
+    "DOCTOR": 8,
+    "DENTAL": 4,
+    "NURSING": 4,
+    "FELLOWSHIP": 4
+  },
+  "portals": {
+    "PGIMER_CHD": {
+      "portal_key": "PGIMER_CHD",
+      "name": "PGIMER Chandigarh Recruitment Cell",
+      "url": "https://pgimer.edu.in",
+      "reachable": true,
+      "status": "LIVE_REACHABLE",
+      "http_code": 200,
+      "latency_ms": 490,
+      "probed_at": "2026-10-18T22:08:28.904358+00:00",
+      "sample_hash": "a3051d771b8f190a"
+    },
+    "AIIMS_EXAMS": {
+      "portal_key": "AIIMS_EXAMS",
+      "name": "AIIMS New Delhi & INI Examinations Portal",
+      "url": "https://www.aiimsexams.ac.in",
+      "reachable": true,
+      "status": "LIVE_REACHABLE",
+      "http_code": 200,
+      "latency_ms": 558,
+      "probed_at": "2026-10-18T22:08:28.904358+00:00",
+      "sample_hash": "4df3e32eeecf794a"
+    },
+    "DMER_MAHARASHTRA": {
+      "portal_key": "DMER_MAHARASHTRA",
+      "name": "DMER Maharashtra / State CET & Medical Education Portal",
+      "url": "https://cetcell.mahacet.org",
+      "reachable": true,
+      "status": "LIVE_REACHABLE",
+      "http_code": 200,
+      "latency_ms": 866,
+      "probed_at": "2026-10-18T22:08:28.904358+00:00",
+      "sample_hash": "22b18783f7a9e353"
+    },
+    "WBHRB": {
+      "portal_key": "WBHRB",
+      "name": "National Health Mission & State Recruitment Portal",
+      "url": "https://nhm.gov.in",
+      "reachable": true,
+      "status": "LIVE_REACHABLE",
+      "http_code": 200,
+      "latency_ms": 245,
+      "probed_at": "2026-10-18T22:08:29.768517+00:00",
+      "sample_hash": "1bad3a28cb07672b"
+    },
+    "TN_MRB": {
+      "portal_key": "TN_MRB",
+      "name": "Tamil Nadu Medical Services Recruitment Board (TN MRB)",
+      "url": "https://www.mrb.tn.gov.in",
+      "reachable": true,
+      "status": "LIVE_REACHABLE",
+      "http_code": 200,
+      "latency_ms": 1164,
+      "probed_at": "2026-10-18T22:08:28.904358+00:00",
+      "sample_hash": "dceb0e3104e640b4"
+    },
+    "DME_KARNATAKA": {
+      "portal_key": "DME_KARNATAKA",
+      "name": "Directorate of Medical Education (DME) Karnataka",
+      "url": "https://dme.karnataka.gov.in",
+      "reachable": true,
+      "status": "LIVE_REACHABLE",
+      "http_code": 200,
+      "latency_ms": 1721,
+      "probed_at": "2026-10-18T22:08:28.904358+00:00",
+      "sample_hash": "72d2cc475e76e55f"
+    },
+    "UP_DGME": {
+      "portal_key": "UP_DGME",
+      "name": "Directorate General of Medical Education & Training (UP DGME)",
+      "url": "https://dgme.up.gov.in",
+      "reachable": true,
+      "status": "LIVE_REACHABLE",
+      "http_code": 200,
+      "latency_ms": 1766,
+      "probed_at": "2026-10-18T22:08:29.389281+00:00",
+      "sample_hash": "fa3b4d718e4f10aa"
+    },
+    "MAIDS_DELHI": {
+      "portal_key": "MAIDS_DELHI",
+      "name": "Delhi Health & MAIDS Dental Recruitment Portal",
+      "url": "https://dsssb.delhi.gov.in",
+      "reachable": true,
+      "status": "LIVE_REACHABLE",
+      "http_code": 200,
+      "latency_ms": 2308,
+      "probed_at": "2026-10-18T22:08:29.463938+00:00",
+      "sample_hash": "334cc5cad824ae77"
+    },
+    "NIMHANS_BLR": {
+      "portal_key": "NIMHANS_BLR",
+      "name": "NIMHANS Bengaluru Official Portal",
+      "url": "https://nimhans.ac.in",
+      "reachable": true,
+      "status": "LIVE_REACHABLE",
+      "http_code": 200,
+      "latency_ms": 3105,
+      "probed_at": "2026-10-18T22:08:28.904358+00:00",
+      "sample_hash": "0e0ff0a917310cb9"
+    },
+    "RUHS_RAJASTHAN": {
+      "portal_key": "RUHS_RAJASTHAN",
+      "name": "Rajasthan University of Health Sciences (RUHS) & DME Jaipur",
+      "url": "https://www.ruhsraj.org",
+      "reachable": true,
+      "status": "LIVE_REACHABLE",
+      "http_code": 200,
+      "latency_ms": 2487,
+      "probed_at": "2026-10-18T22:08:30.018915+00:00",
+      "sample_hash": "c367e1bd4e0ef940"
+    },
+    "ESIC_HQ": {
+      "portal_key": "ESIC_HQ",
+      "name": "ESIC Medical Colleges & Hospitals Recruitment",
+      "url": "https://www.esic.gov.in/recruitments",
+      "reachable": true,
+      "status": "LIVE_REACHABLE",
+      "http_code": 200,
+      "latency_ms": 3634,
+      "probed_at": "2026-10-18T22:08:28.904358+00:00",
+      "sample_hash": "0322dfbe656fa94a"
+    },
+    "JIPMER_PUDUCHERRY": {
+      "portal_key": "JIPMER_PUDUCHERRY",
+      "name": "JIPMER Puducherry Official Portal",
+      "url": "https://jipmer.edu.in",
+      "reachable": false,
+      "status": "CACHED_SNAPSHOT_FALLBACK",
+      "http_code": 0,
+      "latency_ms": 4816,
+      "probed_at": "2026-10-18T22:08:28.904358+00:00",
+      "error": "The read operation timed out",
+      "sample_hash": "b4a8b2a6f0c84cfc"
+    }
+  }
+}

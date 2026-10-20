@@ -1,0 +1,10 @@
+{
+  "name": "MedVantage India — Clinical Careers, Fellowships & Govt/DME Portal",
+  "short_name": "MedVantage",
+  "description": "India's unified career portal and live notification engine for Allopathic Doctors, Dentists, Nurses, and Medical Fellowships.",
+  "start_url": "/#/feed",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary"
+}
